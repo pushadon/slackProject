@@ -11,6 +11,11 @@ public class QueryUrl {
         return revenueUrl;
     }
 
+    public static String getStockYearRevenueUrl(int stockNum, int startMonth, int endMonth) {
+        String revenueUrl = "http://data.xq.com.tw/jds/46/1/"+stockNum+"/TW/GetTAData4Unit.jdxml?SID="+stockNum+".TW&ST=1&a=10&b=16&c=0&f=0";
+        return revenueUrl;
+    }
+
     public static String getStockNetIncomeUrl(int stockNum, int startMonth, int endMonth) {
         String netIncomeUrl = "http://data.xq.com.tw/jds/46/1/"+stockNum+"/TW/GetTAData4Unit.jdxml?SID="+stockNum+".TW&ST=1&a=49&b=14&c="+startMonth+"&f="+endMonth;
         return netIncomeUrl;

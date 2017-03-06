@@ -6,6 +6,10 @@ import org.simpleframework.xml.Path;
 
 import java.util.List;
 
+import info.androidhive.retrofit.model.StockNetIcomeRatioItem;
+import info.androidhive.retrofit.model.StockPriceItem;
+import info.androidhive.retrofit.model.StockRevenueItem;
+
 /**
  * Created by Pushadon on 2017/2/28.
  */

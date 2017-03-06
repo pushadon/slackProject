@@ -61,9 +61,10 @@ public class StockRevenueAdapter extends RecyclerView.Adapter<StockRevenueAdapte
 
     @Override
     public void onBindViewHolder(StockRevenueHolder holder, final int position) {
-        holder.stockNumber.setText(stockItem.get(position).getStockName());
-        holder.stockNextMonthRevenue.setText("Next month estimate revenue YOY "+stockItem.get(position).getEstimateRevenue());
-        holder.currentYoy.setText("Current month revenue YOY "+stockItem.get(position).getCurrentYoy());
+       //
+        // holder.stockNumber.setText(stockItem.get(position).getStockName());
+        //holder.stockNextMonthRevenue.setText("Next month estimate revenue YOY "+stockItem.get(position).getEstimateRevenue());
+       // holder.currentYoy.setText("Current month revenue YOY "+stockItem.get(position).getCurrentYoy());
 
     }
 
