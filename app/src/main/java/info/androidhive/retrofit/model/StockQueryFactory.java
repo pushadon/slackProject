@@ -152,4 +152,47 @@ public  class StockQueryFactory {
 
     }
 
+
+    public static class stockCapital {
+        @Attribute(name = "Expires")
+        private String Expires;
+
+        @Attribute(name = "ID")
+        @Path("Data")
+        private String ID;
+
+        @Attribute(name = "TADataID")
+        @Path("Data")
+        private String TADataID;
+
+        @Attribute(name = "FreqType")
+        @Path("Data")
+        private String FreqType;
+
+        @Attribute(name = "FieldCount")
+        @Path("Data")
+        private String FieldCount;
+
+        @Attribute(name = "AckDate")
+        @Path("Data")
+        private String AckDate;
+
+        @Attribute(name = "MFlag")
+        @Path("Data")
+        private String MFlag;
+
+        @ElementList(name="Item", inline=true)
+        @Path("Data")
+        private List<StockCapitalItem> stockCapitalItem;
+
+        public String getID() {
+            return ID;
+        }
+
+        public List<StockCapitalItem> getStockList() {
+            return stockCapitalItem;
+        }
+
+    }
+
 }

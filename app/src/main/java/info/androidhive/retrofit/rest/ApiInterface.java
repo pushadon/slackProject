@@ -17,4 +17,7 @@ public interface ApiInterface {
 
     @GET
     Call<StockQueryFactory.stockPriceContent> getPriceContentItem(@Url String url);
+
+    @GET
+    Call<StockQueryFactory.stockCapital> getStockCapitalItem(@Url String url);
 }

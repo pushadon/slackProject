@@ -10,6 +10,7 @@ public class StockRevenueEvent {
 
     private List<Double> revenueYoy;
     private Double averageYoy;
+    private Double totalYearRevenue;
 
     private boolean checkYoyMinus = false;
 
@@ -43,6 +44,8 @@ public class StockRevenueEvent {
         return Math.min(averageYoy,revenueYoy.get(0));
     }
 
-
-
+    public Double getYearTotalRevenue() { return totalYearRevenue;}
+    public void setYearTotalRevenue(Double yearTotalRevenue) {
+        this.totalYearRevenue = yearTotalRevenue;
+    }
 }

@@ -8,17 +8,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import info.androidhive.retrofit.R;
 import info.androidhive.retrofit.adapter.StockRevenueAdapter;
+import info.androidhive.retrofit.event.StockCapitalEvent;
 import info.androidhive.retrofit.event.StockIncomeRatioEvent;
 import info.androidhive.retrofit.event.StockPriceContentEvent;
 import info.androidhive.retrofit.event.StockRevenueEvent;
@@ -26,6 +30,7 @@ import info.androidhive.retrofit.model.EstimatedRevenue;
 import info.androidhive.retrofit.model.StockQueryFactory;
 import info.androidhive.retrofit.rest.ApiClient;
 import info.androidhive.retrofit.rest.ApiInterface;
+import info.androidhive.retrofit.util.CapitalStockFactory;
 import info.androidhive.retrofit.util.NetIncomeFactory;
 import info.androidhive.retrofit.util.PriceContentFactory;
 import info.androidhive.retrofit.util.QueryUrl;
@@ -46,14 +51,23 @@ public class MainActivity extends AppCompatActivity {
     EditText et_stockNum;
     EditText et_stockPEHigh;
     EditText et_stockPHLow;
-    EditText et_stockCapital;
-    EditText et_stockYearRevenue;
     Button btn;
     RecyclerView recyclerView;
     Boolean isYoyOK = false;
     Boolean isIncomeOK = false;
     Boolean isPriceOK = false;
     EstimatedRevenue myEstimate;
+
+    TextView estHighPrice;
+    TextView estLowPrice;
+    TextView stockPrice;
+    TextView peHigh;
+    TextView peLow;
+    TextView tv_detail;
+    TextView estEPS;
+    TextView riskRatio;
+
+    LinearLayout resultLayout;
     int okCount = 0;
 
     @Override
@@ -76,28 +90,35 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (RecyclerView)findViewById(R.id.movies_recycler_view);
         myEstimate = new EstimatedRevenue();
         et_stockNum = (EditText)findViewById(R.id.stockNum);
-        et_stockCapital = (EditText)findViewById(R.id.stock_capital_stock);
         et_stockPEHigh = (EditText)findViewById(R.id.stock_pe_high);
         et_stockPHLow = (EditText)findViewById(R.id.stock_pe_low);
-        et_stockYearRevenue = (EditText)findViewById(R.id.stock_year_revenue);
+
+
+        // show result
+        estHighPrice = (TextView)findViewById(R.id.tv_est_high_price);
+        estLowPrice = (TextView)findViewById(R.id.tv_est_low_price);
+        stockPrice = (TextView)findViewById(R.id.stock_price);
+        peHigh = (TextView)findViewById(R.id.tv_pe_high);
+        peLow = (TextView)findViewById(R.id.tv_pe_low);
+        estEPS = (TextView)findViewById(R.id.tv_eps);
+        riskRatio = (TextView)findViewById(R.id.tv_risk);
+        tv_detail = (TextView)findViewById(R.id.tv_detail);
+        resultLayout = (LinearLayout)findViewById(R.id.resultLayout);
+
+
 
         btn = (Button) findViewById(R.id.send);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 okCount = 0;
-//                String[] myStockList = et.getText().toString().split(",");
-//                getRevenueQueryResult(myStockList);
-//                getNetIncomeQueryResult();
-//                getPriceContentQueryResult();
-//                ReveneueFactory.getHalfYearAverageYoy(2330);
+                resultLayout.setVisibility(View.GONE);
                 NetIncomeFactory.getNetIncomeQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
                 PriceContentFactory.getPriceContentQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
                 ReveneueFactory.getHalfYearAverageYoy(Integer.parseInt(et_stockNum.getText().toString()));
+                CapitalStockFactory.getStockCapitalQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
                 myEstimate.setHistoryPELow(Double.parseDouble(et_stockPHLow.getText().toString()));
                 myEstimate.setHistoryPEHigh(Double.parseDouble(et_stockPEHigh.getText().toString()));
-                myEstimate.setYearReveneue(Double.parseDouble(et_stockYearRevenue.getText().toString()));
-                myEstimate.setStockCapital(Double.parseDouble(et_stockCapital.getText().toString()));
                 myEstimate.setStockName(et_stockNum.getText().toString());
 
             }
@@ -119,9 +140,10 @@ public class MainActivity extends AppCompatActivity {
         d("Main AverageYoy",event.getAverageYoy().toString());
         d("Main Suitableyoy",event.getSuitableYoy().toString());
         myEstimate.setRevenueYoy(event.getSuitableYoy());
+        myEstimate.setYearReveneue(event.getYearTotalRevenue());
         okCount++;
 
-        if(okCount == 3) {
+        if(okCount == 4) {
             showResultAndUpdate();
         }
     }
@@ -134,7 +156,18 @@ public class MainActivity extends AppCompatActivity {
         myEstimate.setIncomeRatioAverage(event.getSuitableRatio());
         okCount++;
 
-        if(okCount == 3) {
+        if(okCount == 4) {
+            showResultAndUpdate();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(StockCapitalEvent event) {
+        d("Main totalYear",event.getCapitalContent().toString());
+        myEstimate.setStockCapital(event.getCapitalContent());
+        okCount++;
+
+        if(okCount == 4) {
             showResultAndUpdate();
         }
     }
@@ -147,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         myEstimate.setCurrentPrice(event.getCurrentPrice());
         okCount++;
 
-        if(okCount == 3) {
+        if(okCount == 4) {
             showResultAndUpdate();
         }
     }
@@ -162,8 +195,19 @@ public class MainActivity extends AppCompatActivity {
         final List<EstimatedRevenue> revenuesList = new ArrayList<>();
         myEstimate.getEstimateHighest();
         myEstimate.getEstimateLowest();
-        revenuesList.add(myEstimate);
-        recyclerView.setAdapter(new StockRevenueAdapter(revenuesList, R.layout.list_item_movie, getApplicationContext()));
+
+        estHighPrice.setText(String.format("%.2f", (double)myEstimate.getEstimateHighest()));
+        estLowPrice.setText(String.format("%.2f", (double)myEstimate.getEstimateLowestPrice()));
+        stockPrice.setText(String.format("%.2f", (double)myEstimate.getCurrentPrice()));
+        peLow.setText(String.format("%.2f", (double)myEstimate.getHistoryPELow()));
+        peHigh.setText(String.format("%.2f", (double)myEstimate.getHistoryPEHigh()));
+        estEPS.setText(String.format("%.2f", (double)myEstimate.getEstimateEPS()));
+        riskRatio.setText( String.format("%.2f", (double)myEstimate.getRiskRatio()));
+        tv_detail.setText(myEstimate.getDetailContent());
+        resultLayout.setVisibility(View.VISIBLE);
+
+//        revenuesList.add(myEstimate);
+//        recyclerView.setAdapter(new StockRevenueAdapter(revenuesList, R.layout.list_item_movie, getApplicationContext()));
     }
 
 //    public void getRevenueQueryResult(String[] queryList) {

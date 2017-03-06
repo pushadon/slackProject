@@ -4,7 +4,9 @@ import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import info.androidhive.retrofit.event.StockRevenueEvent;
@@ -25,37 +27,10 @@ public class ReveneueFactory {
 
     final static List<Double> reveneueYoyList = new ArrayList<>();
     static Double halfYearAverageYoy = 0.0;
+    static Double yearTotalRevenue = 0.0;
     private static EventBus mEventBus;
 
 
-    public static void getStockYearRevenueUrl(int stockNum) {
-        mEventBus = EventBus.getDefault();
-
-        ApiInterface apiService =  ApiClient.getClient().create(ApiInterface.class);
-
-        Call<StockQueryFactory.stockRevenue> call = apiService.getRevenueItem(QueryUrl.getStockYearRevenueUrl(stockNum,0,0));
-        call.enqueue(new Callback<StockQueryFactory.stockRevenue>() {
-            @Override
-            public void onResponse(Call<StockQueryFactory.stockRevenue> call, Response<StockQueryFactory.stockRevenue> response) {
-                int statusCode = response.code();
-                StockQueryFactory.stockRevenue result = response.body();
-
-                Log.e("statusCode",""+statusCode);
-                Log.e("item:","ID:"+result.getID());
-
-                Double lastMonthRevenue = Double.parseDouble(result.getStockList().get(0).getValue1());
-                Log.e("lastMonthRevenue:",lastMonthRevenue+"");
-            }
-
-            @Override
-            public void onFailure(Call<StockQueryFactory.stockRevenue> call, Throwable t) {
-                // Log error here since request failed
-                Log.e(TAG, t.toString());
-            }
-        });
-
-
-    }
 
     public static void getHalfYearAverageYoy(int stockNum) {
         mEventBus = EventBus.getDefault();
@@ -85,6 +60,35 @@ public class ReveneueFactory {
                         Log.e("lastMonthYOY  :", "date:"+result.getStockList().get(j).getDate()+"  YOY:"+YOYresult+"%");
                         totalRevenueYOY +=YOYresult;
                     }
+
+
+                    SimpleDateFormat getCurrentMonth = new SimpleDateFormat("MM");
+                    SimpleDateFormat getCurrentYear = new SimpleDateFormat("yyyy");
+
+                    Date dt=new Date();
+                    String dateMonth = getCurrentMonth.format(dt);
+                    String dataYear = getCurrentYear.format(dt);
+                    String compareDate =dataYear;
+                    if(Integer.parseInt(dateMonth) <=12) {
+                        compareDate = String.valueOf(Integer.parseInt(dataYear)-1);
+                    }
+                    Log.w("compareDate",compareDate);
+
+                    int yearRevenueIndex = 0;
+                    for(int k=0; k<12; k++) {
+                        Log.w("checkCompareDate:",result.getStockList().get(k).getDate());
+                        if(result.getStockList().get(k).getDate().contains(compareDate)) {
+                            yearRevenueIndex = k;
+                            Log.w("getDate:",result.getStockList().get(k).getDate());
+                            break;
+                        }
+                    }
+                    yearTotalRevenue = 0.0;
+                    for(int l=yearRevenueIndex;l<yearRevenueIndex+12;l++) {
+                        Log.e("totalRevenue","totalRevenue:"+yearTotalRevenue);
+                        yearTotalRevenue += Double.parseDouble(result.getStockList().get(l).getValue1());
+                    }
+
                     int halfYearYOY = (int)(totalRevenueYOY/6);
                     halfYearAverageYoy = totalRevenueYOY/6;
                     Log.e("halfYearYOY:",halfYearYOY+"%");
@@ -115,6 +119,7 @@ public class ReveneueFactory {
         StockRevenueEvent event = new StockRevenueEvent();
         event.setRevenueYoy(reveneueYoyList);
         event.setAverageYoy(halfYearAverageYoy);
+        event.setYearTotalRevenue(yearTotalRevenue*10000);
         mEventBus.post(event);
     }
 
