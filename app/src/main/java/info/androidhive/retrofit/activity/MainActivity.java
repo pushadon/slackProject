@@ -20,6 +20,7 @@ import info.androidhive.retrofit.model.StockQueryFactory;
 import info.androidhive.retrofit.rest.ApiClient;
 import info.androidhive.retrofit.rest.ApiInterface;
 import info.androidhive.retrofit.util.QueryUrl;
+import info.androidhive.retrofit.util.ReveneueFactory;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,8 +50,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                String[] myStockList = et.getText().toString().split(",");
 //                getRevenueQueryResult(myStockList);
-                getNetIncomeQueryResult();
-                getPriceContentQueryResult();
+//                getNetIncomeQueryResult();
+//                getPriceContentQueryResult();
+                ReveneueFactory.getHalfYearAverageYoy(2330);
             }
         });
 
