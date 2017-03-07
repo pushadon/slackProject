@@ -32,7 +32,7 @@ public class NetIncomeFactory {
         mEventBus = EventBus.getDefault();
         incomeRationList.clear();
         yearAverageRatio = 0.0;
-        ApiInterface apiService =  ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService =  ApiClient.getClientWithXmlConverter().create(ApiInterface.class);
 
         Call<StockQueryFactory.stockNetIncomeRatio> call = apiService.getNetIncomeRatioItem(QueryUrl.getStockNetIncomeUrl(stockNum,20150101,0));
         call.enqueue(new Callback<StockQueryFactory.stockNetIncomeRatio>() {
@@ -43,7 +43,7 @@ public class NetIncomeFactory {
                 Double totalIncomeRatio = 0.0;
                 Log.e("statusCode",""+statusCode);
                 Log.e("item:","ID:"+result.getID());
-                for(int i=0; i<6; i++) {
+                for(int i=0; i<3; i++) {
                     totalIncomeRatio += Double.parseDouble(result.getStockList().get(i).getValue1());
                     incomeRationList.add(Double.parseDouble(result.getStockList().get(i).getValue1()));
                 }

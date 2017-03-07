@@ -28,6 +28,7 @@ public class ReveneueFactory {
     final static List<Double> reveneueYoyList = new ArrayList<>();
     static Double halfYearAverageYoy = 0.0;
     static Double yearTotalRevenue = 0.0;
+    static int currentMonth = 0;
     private static EventBus mEventBus;
 
 
@@ -35,7 +36,7 @@ public class ReveneueFactory {
     public static void getHalfYearAverageYoy(int stockNum) {
         mEventBus = EventBus.getDefault();
 
-        ApiInterface apiService =  ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService =  ApiClient.getClientWithXmlConverter().create(ApiInterface.class);
 
             Call<StockQueryFactory.stockRevenue> call = apiService.getRevenueItem(QueryUrl.getStockRevenueUrl(stockNum,0,0));
             call.enqueue(new Callback<StockQueryFactory.stockRevenue>() {
@@ -64,9 +65,11 @@ public class ReveneueFactory {
 
                     SimpleDateFormat getCurrentMonth = new SimpleDateFormat("MM");
                     SimpleDateFormat getCurrentYear = new SimpleDateFormat("yyyy");
-
                     Date dt=new Date();
                     String dateMonth = getCurrentMonth.format(dt);
+
+                    String listCloseMonth = result.getStockList().get(0).getDate().toString();
+                    currentMonth = Integer.valueOf(listCloseMonth.substring(4,6));
                     String dataYear = getCurrentYear.format(dt);
                     String compareDate =dataYear;
                     if(Integer.parseInt(dateMonth) <=12) {
@@ -120,6 +123,7 @@ public class ReveneueFactory {
         event.setRevenueYoy(reveneueYoyList);
         event.setAverageYoy(halfYearAverageYoy);
         event.setYearTotalRevenue(yearTotalRevenue*10000);
+        event.setCurrentMonth(currentMonth);
         mEventBus.post(event);
     }
 

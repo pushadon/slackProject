@@ -1,5 +1,8 @@
 package info.androidhive.retrofit.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Path;
@@ -193,6 +196,64 @@ public  class StockQueryFactory {
             return stockCapitalItem;
         }
 
+    }
+
+    public static class stockFincialRatio {
+        @SerializedName("rows")
+        @Expose
+        private List<StockFinancialRatioItem> rows = null;
+        @SerializedName("ColName")
+        @Expose
+        private List<String> colName = null;
+        @SerializedName("dt")
+        @Expose
+        private String dt;
+        @SerializedName("ExpireType")
+        @Expose
+        private String expireType;
+        @SerializedName("SERVERNAME")
+        @Expose
+        private String sERVERNAME;
+
+        public List<StockFinancialRatioItem> getRows() {
+            return rows;
+        }
+
+        public void setRows(List<StockFinancialRatioItem> rows) {
+            this.rows = rows;
+        }
+
+        public List<String> getColName() {
+            return colName;
+        }
+
+        public void setColName(List<String> colName) {
+            this.colName = colName;
+        }
+
+        public String getDt() {
+            return dt;
+        }
+
+        public void setDt(String dt) {
+            this.dt = dt;
+        }
+
+        public String getExpireType() {
+            return expireType;
+        }
+
+        public void setExpireType(String expireType) {
+            this.expireType = expireType;
+        }
+
+        public String getSERVERNAME() {
+            return sERVERNAME;
+        }
+
+        public void setSERVERNAME(String sERVERNAME) {
+            this.sERVERNAME = sERVERNAME;
+        }
     }
 
 }

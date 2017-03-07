@@ -33,6 +33,7 @@ import info.androidhive.retrofit.model.StockQueryFactory;
 import info.androidhive.retrofit.rest.ApiClient;
 import info.androidhive.retrofit.rest.ApiInterface;
 import info.androidhive.retrofit.util.CapitalStockFactory;
+import info.androidhive.retrofit.util.FinancialRatioFactory;
 import info.androidhive.retrofit.util.NetIncomeFactory;
 import info.androidhive.retrofit.util.PriceContentFactory;
 import info.androidhive.retrofit.util.QueryUrl;
@@ -117,15 +118,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 okCount = 0;
                 resultLayout.setVisibility(View.GONE);
-                tvLink.setText(Html.fromHtml("<a href=http://goodinfo.tw/StockInfo/ShowK_ChartFlow.asp?RPT_CAT=PER&STOCK_ID="+et_stockNum.getText().toString()+"&CHT_CAT=MONTH>"+et_stockNum.getText().toString()+"PE interval"));
-                tvLink.setMovementMethod(LinkMovementMethod.getInstance());
-                NetIncomeFactory.getNetIncomeQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
-                PriceContentFactory.getPriceContentQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
-                ReveneueFactory.getHalfYearAverageYoy(Integer.parseInt(et_stockNum.getText().toString()));
-                CapitalStockFactory.getStockCapitalQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
-                myEstimate.setHistoryPELow(Double.parseDouble(et_stockPHLow.getText().toString()));
-                myEstimate.setHistoryPEHigh(Double.parseDouble(et_stockPEHigh.getText().toString()));
-                myEstimate.setStockName(et_stockNum.getText().toString());
+                //tvLink.setText(Html.fromHtml("<a href=http://goodinfo.tw/StockInfo/ShowK_ChartFlow.asp?RPT_CAT=PER&STOCK_ID="+et_stockNum.getText().toString()+"&CHT_CAT=MONTH>"+et_stockNum.getText().toString()+"PE interval"));
+                //tvLink.setMovementMethod(LinkMovementMethod.getInstance());
+                //NetIncomeFactory.getNetIncomeQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
+               // PriceContentFactory.getPriceContentQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
+                //ReveneueFactory.getHalfYearAverageYoy(Integer.parseInt(et_stockNum.getText().toString()));
+                //CapitalStockFactory.getStockCapitalQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
+                FinancialRatioFactory.getStockFinancialRatioQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
+                //myEstimate.setHistoryPELow(Double.parseDouble(et_stockPHLow.getText().toString()));
+               // myEstimate.setHistoryPEHigh(Double.parseDouble(et_stockPEHigh.getText().toString()));
+                //myEstimate.setStockName(et_stockNum.getText().toString());
 
             }
         });
@@ -218,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
 
 //    public void getRevenueQueryResult(String[] queryList) {
 //        final List<EstimatedRevenue> revenuesList = new ArrayList<>();
-//        ApiInterface apiService =  ApiClient.getClient().create(ApiInterface.class);
+//        ApiInterface apiService =  ApiClient.getClientWithXmlConverter().create(ApiInterface.class);
 //        for(int i=0; i<queryList.length; i++) {
 //            String BASE_URL = "http://data.xq.com.tw/jds/46/1/"+queryList[i].toString()+"/TW/GetTAData4Unit.jdxml?SID="+queryList[i].toString()+".TW&ST=1&a=10&b=10&c=20160201&f=0";
 //
@@ -265,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //
 //    public void getNetIncomeQueryResult() {
-//        ApiInterface apiService =  ApiClient.getClient().create(ApiInterface.class);
+//        ApiInterface apiService =  ApiClient.getClientWithXmlConverter().create(ApiInterface.class);
 //
 //        Call<StockQueryFactory.stockNetIncomeRatio> call = apiService.getNetIncomeRatioItem(QueryUrl.getStockNetIncomeUrl(2330,20160101,20170101));
 //        call.enqueue(new Callback<StockQueryFactory.stockNetIncomeRatio>() {
@@ -292,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //
 //    public void getPriceContentQueryResult() {
-//        ApiInterface apiService =  ApiClient.getClient().create(ApiInterface.class);
+//        ApiInterface apiService =  ApiClient.getClientWithXmlConverter().create(ApiInterface.class);
 //
 //        Call<StockQueryFactory.stockPriceContent> call = apiService.getPriceContentItem(QueryUrl.getStockPriceContentUrl(2330,20160101,20170101));
 //        call.enqueue(new Callback<StockQueryFactory.stockPriceContent>() {

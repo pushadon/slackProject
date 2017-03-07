@@ -147,7 +147,7 @@ public class EstimatedRevenue {
         Log.d("EstimatedRevenue","getEstimateLowest:"+estimateLowestPrice);
 
 
-        estimateRiskRatio = Math.abs((historyPEHigh-currentPrice)/(currentPrice-historyPELow));
+        estimateRiskRatio = Math.abs((estimateHighestPrice-currentPrice)/(currentPrice-estimateLowestPrice));
         return estimateLowestPrice;
     }
     public Double getRiskRatio(){return estimateRiskRatio;}

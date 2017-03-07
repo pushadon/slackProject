@@ -25,4 +25,9 @@ public class QueryUrl {
         String capitalUrl = "http://data.xq.com.tw/jds/46/1/"+stockNum+"/TW/GetTAData4Unit.jdxml?SID="+stockNum+".TW&ST=1&a=44&b=14&c=0&f=0";
         return capitalUrl;
     }
+
+    public static String getStockFinanicalRatio(int stockNum, int startDate, int endDate) {
+        String finanicalRatioUrl = "http://data.xq.com.tw/Z/XQWEB2011/DATA/JVO2.xdjjs?A=46&B=1&C=05205&P="+stockNum+".TW|Q&Lang=TW";
+        return finanicalRatioUrl;
+    }
 }

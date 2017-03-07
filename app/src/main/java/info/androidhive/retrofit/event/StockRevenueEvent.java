@@ -1,5 +1,7 @@
 package info.androidhive.retrofit.event;
 
+import android.util.Log;
+
 import java.util.List;
 
 /**
@@ -12,6 +14,11 @@ public class StockRevenueEvent {
     private Double averageYoy;
     private Double totalYearRevenue;
 
+    public void setCurrentMonth(int currentMonth) {
+        this.currentMonth = currentMonth;
+    }
+
+    private int currentMonth;
     private boolean checkYoyMinus = false;
 
 
@@ -41,7 +48,12 @@ public class StockRevenueEvent {
     }
 
     public Double getSuitableYoy() {
-        return Math.min(averageYoy,revenueYoy.get(0));
+        //return averageYoy;
+        if(currentMonth == 1 || currentMonth ==2) {
+            return averageYoy;
+        } else {
+            return Math.min(averageYoy,revenueYoy.get(0));
+        }
     }
 
     public Double getYearTotalRevenue() { return totalYearRevenue;}

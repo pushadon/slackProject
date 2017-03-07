@@ -2,6 +2,8 @@ package info.androidhive.retrofit.rest;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -20,7 +22,7 @@ public class ApiClient {
     private static OkHttpClient okClient = null;
 
 
-    public static Retrofit getClient() {
+    public static Retrofit getClientWithXmlConverter() {
 
         if(okClient == null)
             initOkHttp();
@@ -30,6 +32,23 @@ public class ApiClient {
                     .client(okClient)
                     .baseUrl("http://www.what.com/")
                     .addConverterFactory(SimpleXmlConverterFactory.create())
+                    .build();
+            Log.e("build Client","");
+
+        }
+        return retrofit;
+    }
+
+    public static Retrofit getClientWithGsonConverter() {
+
+        if(okClient == null)
+            initOkHttp();
+        if (retrofit==null) {
+            String mUrl = BASE_URL+ "/";
+            retrofit = new Retrofit.Builder()
+                    .client(okClient)
+                    .baseUrl("http://www.what.com/")
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build();
             Log.e("build Client","");
 
