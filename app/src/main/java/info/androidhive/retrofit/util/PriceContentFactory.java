@@ -35,7 +35,9 @@ public class PriceContentFactory {
 
     public static void getPriceContentQueryResult(int stockNum) {
         mEventBus = EventBus.getDefault();
-
+        yearHightesPrice = 0.0;
+        yearLowestsPrice = 100000.0;
+        currentPrice = 0.0;
         ApiInterface apiService =  ApiClient.getClient().create(ApiInterface.class);
 
         Call<StockQueryFactory.stockPriceContent> call = apiService.getPriceContentItem(QueryUrl.getStockPriceContentUrl(stockNum,20160101,0));

@@ -30,7 +30,8 @@ public class NetIncomeFactory {
 
     public static void getNetIncomeQueryResult(int stockNum) {
         mEventBus = EventBus.getDefault();
-
+        incomeRationList.clear();
+        yearAverageRatio = 0.0;
         ApiInterface apiService =  ApiClient.getClient().create(ApiInterface.class);
 
         Call<StockQueryFactory.stockNetIncomeRatio> call = apiService.getNetIncomeRatioItem(QueryUrl.getStockNetIncomeUrl(stockNum,20150101,0));

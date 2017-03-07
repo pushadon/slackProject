@@ -27,7 +27,7 @@ public class CapitalStockFactory {
 
     public static void getStockCapitalQueryResult(int stockNum) {
         mEventBus = EventBus.getDefault();
-
+        capitcalStockContent = 9.9;
         ApiInterface apiService =  ApiClient.getClient().create(ApiInterface.class);
 
         Call<StockQueryFactory.stockCapital> call = apiService.getStockCapitalItem(QueryUrl.getStockCapital(stockNum,20150101,0));

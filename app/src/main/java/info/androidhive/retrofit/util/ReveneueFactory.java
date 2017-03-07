@@ -43,7 +43,7 @@ public class ReveneueFactory {
                 public void onResponse(Call<StockQueryFactory.stockRevenue> call, Response<StockQueryFactory.stockRevenue> response) {
                     int statusCode = response.code();
                     StockQueryFactory.stockRevenue result = response.body();
-
+                    reveneueYoyList.clear();
                     Log.e("statusCode",""+statusCode);
                     Log.e("item:","ID:"+result.getID());
 

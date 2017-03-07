@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tv_detail;
     TextView estEPS;
     TextView riskRatio;
+    TextView tvLink;
 
     LinearLayout resultLayout;
     int okCount = 0;
@@ -103,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         estEPS = (TextView)findViewById(R.id.tv_eps);
         riskRatio = (TextView)findViewById(R.id.tv_risk);
         tv_detail = (TextView)findViewById(R.id.tv_detail);
+        tvLink = (TextView) findViewById(R.id.tv_link);
         resultLayout = (LinearLayout)findViewById(R.id.resultLayout);
 
 
@@ -113,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 okCount = 0;
                 resultLayout.setVisibility(View.GONE);
+                tvLink.setText(Html.fromHtml("<a href=http://goodinfo.tw/StockInfo/ShowK_ChartFlow.asp?RPT_CAT=PER&STOCK_ID="+et_stockNum.getText().toString()+"&CHT_CAT=MONTH>"+et_stockNum.getText().toString()+"PE interval"));
+                tvLink.setMovementMethod(LinkMovementMethod.getInstance());
                 NetIncomeFactory.getNetIncomeQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
                 PriceContentFactory.getPriceContentQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
                 ReveneueFactory.getHalfYearAverageYoy(Integer.parseInt(et_stockNum.getText().toString()));

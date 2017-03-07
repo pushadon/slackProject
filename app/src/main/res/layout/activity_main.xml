@@ -43,6 +43,10 @@
             android:text="12"
             android:id="@+id/stock_pe_low" />
     </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_link"/>
 
     <Button
         android:text="Send"
