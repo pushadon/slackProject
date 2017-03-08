@@ -20,7 +20,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static info.androidhive.retrofit.R.id.stockNum;
 import static info.androidhive.retrofit.util.CapitalStockFactory.capitcalStockContent;
+import static info.androidhive.retrofit.util.PriceContentFactory.yearHightesPrice;
+import static info.androidhive.retrofit.util.PriceContentFactory.yearLowestsPrice;
 
 /**
  * Created by Don_Chiang on 2017/3/6.
@@ -31,7 +34,10 @@ public class FinancialRatioFactory {
     public static String TAG = "FinancialRatioFactory";
 
     static List<Double> myYearEpsList= new ArrayList<>();
+    static int epsTargetYear = 0;
+    static int epsTargetMonth = 0;
     private static EventBus mEventBus;
+    static int queryYear = 0;
 
 
     public static void getStockFinancialRatioQueryResult(int stockNum) {
@@ -49,7 +55,10 @@ public class FinancialRatioFactory {
                 Log.e("Financial Result","dataYear:"+dataYear+"  dataMonth:"+dataMonth);
                 myYearEpsList = getQueryYearEpsList(response,dataYear,dataMonth);
                 Log.e("my Year List:",myYearEpsList.toString());
+                epsTargetYear = Integer.valueOf(dataYear);
+                epsTargetMonth = Integer.valueOf(dataMonth);
                 sendEvent();
+
             }
 
             @Override
@@ -65,6 +74,8 @@ public class FinancialRatioFactory {
     private static void sendEvent() {
         StockFinancialRatioEvent event = new StockFinancialRatioEvent();
         event.setYearEpsList(myYearEpsList);
+        event.setEpsBaseMonth(epsTargetMonth);
+        event.setEpsBaseYear(epsTargetYear);
         mEventBus.post(event);
     }
 

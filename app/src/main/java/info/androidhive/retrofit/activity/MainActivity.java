@@ -17,30 +17,22 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import info.androidhive.retrofit.R;
-import info.androidhive.retrofit.adapter.StockRevenueAdapter;
 import info.androidhive.retrofit.event.StockCapitalEvent;
+import info.androidhive.retrofit.event.StockFinancialRatioEvent;
 import info.androidhive.retrofit.event.StockIncomeRatioEvent;
 import info.androidhive.retrofit.event.StockPriceContentEvent;
 import info.androidhive.retrofit.event.StockRevenueEvent;
 import info.androidhive.retrofit.model.EstimatedRevenue;
-import info.androidhive.retrofit.model.StockQueryFactory;
-import info.androidhive.retrofit.rest.ApiClient;
-import info.androidhive.retrofit.rest.ApiInterface;
 import info.androidhive.retrofit.util.CapitalStockFactory;
 import info.androidhive.retrofit.util.FinancialRatioFactory;
 import info.androidhive.retrofit.util.NetIncomeFactory;
 import info.androidhive.retrofit.util.PriceContentFactory;
-import info.androidhive.retrofit.util.QueryUrl;
 import info.androidhive.retrofit.util.ReveneueFactory;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static android.util.Log.d;
 
@@ -118,16 +110,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 okCount = 0;
                 resultLayout.setVisibility(View.GONE);
-                //tvLink.setText(Html.fromHtml("<a href=http://goodinfo.tw/StockInfo/ShowK_ChartFlow.asp?RPT_CAT=PER&STOCK_ID="+et_stockNum.getText().toString()+"&CHT_CAT=MONTH>"+et_stockNum.getText().toString()+"PE interval"));
-                //tvLink.setMovementMethod(LinkMovementMethod.getInstance());
-                //NetIncomeFactory.getNetIncomeQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
-               // PriceContentFactory.getPriceContentQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
-                //ReveneueFactory.getHalfYearAverageYoy(Integer.parseInt(et_stockNum.getText().toString()));
-                //CapitalStockFactory.getStockCapitalQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
+                tvLink.setText(Html.fromHtml("<a href=http://goodinfo.tw/StockInfo/ShowK_ChartFlow.asp?RPT_CAT=PER&STOCK_ID="+et_stockNum.getText().toString()+"&CHT_CAT=MONTH>"+et_stockNum.getText().toString()+"PE interval"));
+                tvLink.setMovementMethod(LinkMovementMethod.getInstance());
+                NetIncomeFactory.getNetIncomeQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
+                //PriceContentFactory.getPriceContentQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
+                ReveneueFactory.getHalfYearAverageYoy(Integer.parseInt(et_stockNum.getText().toString()));
+                CapitalStockFactory.getStockCapitalQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
                 FinancialRatioFactory.getStockFinancialRatioQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
-                //myEstimate.setHistoryPELow(Double.parseDouble(et_stockPHLow.getText().toString()));
-               // myEstimate.setHistoryPEHigh(Double.parseDouble(et_stockPEHigh.getText().toString()));
-                //myEstimate.setStockName(et_stockNum.getText().toString());
+                myEstimate.setHistoryPELow(Double.parseDouble(et_stockPHLow.getText().toString()));
+                myEstimate.setHistoryPEHigh(Double.parseDouble(et_stockPEHigh.getText().toString()));
+                myEstimate.setStockName(et_stockNum.getText().toString());
 
             }
         });
@@ -144,14 +136,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(StockRevenueEvent event) {
-        d("Main  RevenueYoy",event.getRevenueYoy().toString());
+        d("Main  RevenueYoy",event.getRevenueYoyList().toString());
         d("Main AverageYoy",event.getAverageYoy().toString());
         d("Main Suitableyoy",event.getSuitableYoy().toString());
         myEstimate.setRevenueYoy(event.getSuitableYoy());
         myEstimate.setYearReveneue(event.getYearTotalRevenue());
+        myEstimate.setStockYoyList(event.getRevenueYoyList());
         okCount++;
 
-        if(okCount == 4) {
+        if(okCount == 5) {
             showResultAndUpdate();
         }
     }
@@ -162,9 +155,10 @@ public class MainActivity extends AppCompatActivity {
         d("Main IncomeAverage",event.getIncomeRationAverage().toString());
         d("Main SuitableIncome",event.getSuitableRatio().toString());
         myEstimate.setIncomeRatioAverage(event.getSuitableRatio());
+        myEstimate.setIncomeRatioList(event.getIncomeRatioList());
         okCount++;
 
-        if(okCount == 4) {
+        if(okCount == 5) {
             showResultAndUpdate();
         }
     }
@@ -175,7 +169,18 @@ public class MainActivity extends AppCompatActivity {
         myEstimate.setStockCapital(event.getCapitalContent());
         okCount++;
 
-        if(okCount == 4) {
+        if(okCount == 5) {
+            showResultAndUpdate();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(StockFinancialRatioEvent event) {
+        d("Main totalYear",event.getYearEpsList().toString());
+        myEstimate.setStockYearEps(event.getYearEpsList());
+        PriceContentFactory.getRelatePriceAndSendEvent(Integer.parseInt(et_stockNum.getText().toString()),event.getEpsBaseYear(),event.getEpsBaseMonth());
+        okCount++;
+        if(okCount == 5) {
             showResultAndUpdate();
         }
     }
@@ -186,9 +191,10 @@ public class MainActivity extends AppCompatActivity {
         d("Main L price",event.getYearLowestPrice().toString());
         d("Main C price",event.getCurrentPrice().toString());
         myEstimate.setCurrentPrice(event.getCurrentPrice());
+        myEstimate.setStockYearPriceBond(event.getYearPriceBond());
         okCount++;
 
-        if(okCount == 4) {
+        if(okCount == 5) {
             showResultAndUpdate();
         }
     }
@@ -207,8 +213,8 @@ public class MainActivity extends AppCompatActivity {
         estHighPrice.setText(String.format("%.2f", (double)myEstimate.getEstimateHighest()));
         estLowPrice.setText(String.format("%.2f", (double)myEstimate.getEstimateLowestPrice()));
         stockPrice.setText(String.format("%.2f", (double)myEstimate.getCurrentPrice()));
-        peLow.setText(String.format("%.2f", (double)myEstimate.getHistoryPELow()));
-        peHigh.setText(String.format("%.2f", (double)myEstimate.getHistoryPEHigh()));
+        peLow.setText(String.format("%.2f", (double)myEstimate.getStockYearPEAverage()[1]));
+        peHigh.setText(String.format("%.2f", (double)myEstimate.getStockYearPEAverage()[0]));
         estEPS.setText(String.format("%.2f", (double)myEstimate.getEstimateEPS()));
         riskRatio.setText( String.format("%.2f", (double)myEstimate.getRiskRatio()));
         tv_detail.setText(myEstimate.getDetailContent());

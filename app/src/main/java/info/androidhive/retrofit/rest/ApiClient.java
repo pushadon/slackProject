@@ -23,7 +23,7 @@ public class ApiClient {
 
 
     public static Retrofit getClientWithXmlConverter() {
-
+        resetApiClient();
         if(okClient == null)
             initOkHttp();
         if (retrofit==null) {
@@ -40,7 +40,7 @@ public class ApiClient {
     }
 
     public static Retrofit getClientWithGsonConverter() {
-
+        resetApiClient();
         if(okClient == null)
             initOkHttp();
         if (retrofit==null) {

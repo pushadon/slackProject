@@ -1,7 +1,5 @@
 package info.androidhive.retrofit.event;
 
-import android.util.Log;
-
 import java.util.List;
 
 /**
@@ -10,7 +8,7 @@ import java.util.List;
 
 public class StockRevenueEvent {
 
-    private List<Double> revenueYoy;
+    private List<Double> revenueYoyList;
     private Double averageYoy;
     private Double totalYearRevenue;
 
@@ -31,13 +29,13 @@ public class StockRevenueEvent {
     }
 
 
-    public List<Double> getRevenueYoy() {
-        return revenueYoy;
+    public List<Double> getRevenueYoyList() {
+        return revenueYoyList;
     }
 
-    public void setRevenueYoy(List<Double> revenueYoy) {
-        this.revenueYoy = revenueYoy;
-        for (Double item : revenueYoy) {
+    public void setRevenueYoyList(List<Double> revenueYoyList) {
+        this.revenueYoyList = revenueYoyList;
+        for (Double item : revenueYoyList) {
             if(item <0)
                 checkYoyMinus = true;
         }
@@ -52,7 +50,7 @@ public class StockRevenueEvent {
         if(currentMonth == 1 || currentMonth ==2) {
             return averageYoy;
         } else {
-            return Math.min(averageYoy,revenueYoy.get(0));
+            return Math.min(averageYoy, revenueYoyList.get(0));
         }
     }
 

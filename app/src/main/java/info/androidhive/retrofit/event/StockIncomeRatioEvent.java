@@ -29,10 +29,6 @@ public class StockIncomeRatioEvent {
 
     public void setIncomeRatioList(List<Double> incomeRatioList) {
         this.incomeRatioList = incomeRatioList;
-//        for (Double item : incomeRatioList) {
-//            if(item > incomeRationAverage*1.2  || item<incomeRationAverage*.8)
-//                checkRatioDecreaseToMuch = true;
-//        }
     }
 
     public boolean getFlagStrange() {

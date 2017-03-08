@@ -42,24 +42,26 @@
             android:inputType="number"
             android:text="12"
             android:id="@+id/stock_pe_low" />
+        <Button
+            android:text="Send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/editText"
+            android:layout_toEndOf="@+id/editText"
+            android:layout_marginLeft="38dp"
+            android:layout_marginStart="38dp"
+            android:id="@+id/send" />
     </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_link"/>
 
-    <Button
-        android:text="Send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/editText"
-        android:layout_toEndOf="@+id/editText"
-        android:layout_marginLeft="38dp"
-        android:layout_marginStart="38dp"
-        android:id="@+id/send" />
+
 
     <LinearLayout
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="50dp"
         android:id="@+id/resultLayout"
         android:layout_width="wrap_content"

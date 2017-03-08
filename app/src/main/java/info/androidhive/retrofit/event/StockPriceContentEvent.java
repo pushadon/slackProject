@@ -11,6 +11,7 @@ public class StockPriceContentEvent {
     private Double yearLowestPrice;
     private Double currentPrice;
     private Double yearHighestPrice;
+    private List<Double[]> yearPriceBond;
 
     public Double getYearHightestPrice() {
         return yearHighestPrice;
@@ -27,6 +28,15 @@ public class StockPriceContentEvent {
 
     public void setYearLowestPrice(Double yearLowestPrice) {
         this.yearLowestPrice = yearLowestPrice;
+    }
+
+
+    public List<Double[]> getYearPriceBond() {
+        return yearPriceBond;
+    }
+
+    public void setYearPriceBond(List<Double[]> yearPriceBond) {
+        this.yearPriceBond = yearPriceBond;
     }
 
 

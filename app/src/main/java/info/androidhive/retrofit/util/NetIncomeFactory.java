@@ -43,13 +43,13 @@ public class NetIncomeFactory {
                 Double totalIncomeRatio = 0.0;
                 Log.e("statusCode",""+statusCode);
                 Log.e("item:","ID:"+result.getID());
-                for(int i=0; i<3; i++) {
+                for(int i=0; i<4; i++) {
                     totalIncomeRatio += Double.parseDouble(result.getStockList().get(i).getValue1());
                     incomeRationList.add(Double.parseDouble(result.getStockList().get(i).getValue1()));
                 }
-                yearAverageRatio = totalIncomeRatio/6;
+                yearAverageRatio = totalIncomeRatio/4;
                 Log.e("item:","netIncome:"+incomeRationList.toString());
-                Log.e("item:","netIncome average:"+totalIncomeRatio/6);
+                Log.e("item:","netIncome average:"+totalIncomeRatio/4);
                 sendEvent();
 
             }

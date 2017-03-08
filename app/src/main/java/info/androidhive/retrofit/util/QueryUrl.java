@@ -17,7 +17,7 @@ public class QueryUrl {
     }
 
     public static String getStockPriceContentUrl(int stockNum, int startDate, int endDate) {
-        String priceUrl = "http://data.xq.com.tw/jds/46/1/"+stockNum+"/TW/gethistdata2B.jdxml?SID="+stockNum+".TW&ST=1&a=8&b="+startDate+"&d="+endDate;
+        String priceUrl = "http://data.xq.com.tw/jds/46/1/"+stockNum+"/TW/gethistdata2B.jdxml?SID="+stockNum+".TW&ST=1&a=13&b="+startDate+"&d="+endDate;
         return priceUrl;
     }
 

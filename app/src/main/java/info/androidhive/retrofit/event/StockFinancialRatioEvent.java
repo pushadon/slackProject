@@ -11,7 +11,25 @@ import static android.R.id.list;
 public class StockFinancialRatioEvent {
 
     private List<Double> myYearEpsList;
+    private int epsBaseYear;
+    private int epsBaseMonth;
 
+    public int getEpsBaseYear() {
+        return epsBaseYear;
+    }
+
+    public void setEpsBaseYear(int epsBaseYear) {
+        this.epsBaseYear = epsBaseYear;
+    }
+
+
+    public int getEpsBaseMonth() {
+        return epsBaseMonth;
+    }
+
+    public void setEpsBaseMonth(int epsBaseMonth) {
+        this.epsBaseMonth = epsBaseMonth;
+    }
 
     public List<Double> getYearEpsList() {
         return myYearEpsList;

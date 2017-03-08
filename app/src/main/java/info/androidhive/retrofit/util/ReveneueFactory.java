@@ -120,7 +120,7 @@ public class ReveneueFactory {
 
     private static void sendEvent() {
         StockRevenueEvent event = new StockRevenueEvent();
-        event.setRevenueYoy(reveneueYoyList);
+        event.setRevenueYoyList(reveneueYoyList);
         event.setAverageYoy(halfYearAverageYoy);
         event.setYearTotalRevenue(yearTotalRevenue*10000);
         event.setCurrentMonth(currentMonth);

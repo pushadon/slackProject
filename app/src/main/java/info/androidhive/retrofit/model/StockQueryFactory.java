@@ -141,7 +141,16 @@ public  class StockQueryFactory {
         @Path("Data")
         private String unit;
 
-        @ElementList(name="Item", inline=true)
+        @Attribute(name = "Date")
+        @Path("Data")
+        private String date;
+
+        @Attribute(name = "IsBegin")
+        @Path("Data")
+        private String isBegin;
+
+
+        @ElementList(name="Item", inline=true ,required = false)
         @Path("Data")
         private List<StockPriceItem> stockPriceItem;
 
