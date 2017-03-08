@@ -86,16 +86,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (RecyclerView)findViewById(R.id.movies_recycler_view);
         myEstimate = new EstimatedRevenue();
         et_stockNum = (EditText)findViewById(R.id.stockNum);
-        et_stockPEHigh = (EditText)findViewById(R.id.stock_pe_high);
-        et_stockPHLow = (EditText)findViewById(R.id.stock_pe_low);
+
 
 
         // show result
         estHighPrice = (TextView)findViewById(R.id.tv_est_high_price);
         estLowPrice = (TextView)findViewById(R.id.tv_est_low_price);
         stockPrice = (TextView)findViewById(R.id.stock_price);
-        peHigh = (TextView)findViewById(R.id.tv_pe_high);
-        peLow = (TextView)findViewById(R.id.tv_pe_low);
         estEPS = (TextView)findViewById(R.id.tv_eps);
         riskRatio = (TextView)findViewById(R.id.tv_risk);
         tv_detail = (TextView)findViewById(R.id.tv_detail);
@@ -117,8 +114,6 @@ public class MainActivity extends AppCompatActivity {
                 ReveneueFactory.getHalfYearAverageYoy(Integer.parseInt(et_stockNum.getText().toString()));
                 CapitalStockFactory.getStockCapitalQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
                 FinancialRatioFactory.getStockFinancialRatioQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
-                myEstimate.setHistoryPELow(Double.parseDouble(et_stockPHLow.getText().toString()));
-                myEstimate.setHistoryPEHigh(Double.parseDouble(et_stockPEHigh.getText().toString()));
                 myEstimate.setStockName(et_stockNum.getText().toString());
 
             }
@@ -213,8 +208,6 @@ public class MainActivity extends AppCompatActivity {
         estHighPrice.setText(String.format("%.2f", (double)myEstimate.getEstimateHighest()));
         estLowPrice.setText(String.format("%.2f", (double)myEstimate.getEstimateLowestPrice()));
         stockPrice.setText(String.format("%.2f", (double)myEstimate.getCurrentPrice()));
-        peLow.setText(String.format("%.2f", (double)myEstimate.getStockYearPEAverage()[1]));
-        peHigh.setText(String.format("%.2f", (double)myEstimate.getStockYearPEAverage()[0]));
         estEPS.setText(String.format("%.2f", (double)myEstimate.getEstimateEPS()));
         riskRatio.setText( String.format("%.2f", (double)myEstimate.getRiskRatio()));
         tv_detail.setText(myEstimate.getDetailContent());
