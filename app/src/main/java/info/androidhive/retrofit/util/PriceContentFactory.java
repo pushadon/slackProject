@@ -123,9 +123,12 @@ public class PriceContentFactory {
                     if(Integer.valueOf(result.getStockList().get(i).getDate().substring(0,4)) == queryYear) {
                         //Log.e("if loop", "Date:"+result.getStockList().get(i).getDate().toString());
 
-                        tempPrice = Double.parseDouble(result.getStockList().get(i).getClosePrice());
+                        tempPrice = Double.parseDouble(result.getStockList().get(i).getLowPrice());
                         if(tempPrice < tempLowPrice)
                             tempLowPrice = tempPrice;
+                        Log.e("Year Price List:","date:"+Double.parseDouble(result.getStockList().get(i).getHightPrice())+"high price:"+tempPrice);
+                        tempPrice = Double.parseDouble(result.getStockList().get(i).getHightPrice());
+
                         if(tempPrice > tempHighPrice)
                             tempHighPrice = tempPrice;
                     } else {
@@ -141,6 +144,8 @@ public class PriceContentFactory {
                             if(tempPrice < tempLowPrice)
                                 tempLowPrice = tempPrice;
                             tempPrice = Double.parseDouble(result.getStockList().get(i).getLowPrice());
+                            Log.e("Year Price List:","high price:"+tempPrice);
+
                             if(tempPrice > tempHighPrice)
                                 tempHighPrice = tempPrice;
                         }

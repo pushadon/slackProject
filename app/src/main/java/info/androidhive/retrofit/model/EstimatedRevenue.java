@@ -16,8 +16,18 @@ public class EstimatedRevenue {
 
     private Double currentPrice;
     private Double estimateRevenue;
+
+    public Double getRevenueYoy() {
+        return revenueYoy;
+    }
+
     private Double revenueYoy;
     private Double yearReveneue;
+
+    public Double getIncomeRatioAverage() {
+        return incomeRatioAverage;
+    }
+
     private Double incomeRatioAverage;
     private Double stockCapitalContent;
     private List<Double> stockYearEps;
@@ -74,9 +84,9 @@ public class EstimatedRevenue {
             incomeRatio += "  "+String.format( "%.2f", incomeRatioList.get(i));
         }
 
-        return "\n\nDetail \n\n yearRevenue:"+yearReveneue+"\n\n revenueYOY:"+revenueYoy/100+"\n\n " +
-                "incomeRatioAverage:"+incomeRatioAverage/100+"\n\n " +
-                "stockCapitalContent:"+stockCapitalContent + "\n\n"+
+        return "\nDetail \n yearRevenue:"+yearReveneue+"\n revenueYOY:"+revenueYoy/100+"\n " +
+                "incomeRatioAverage:"+incomeRatioAverage/100+"\n " +
+                "stockCapitalContent:"+stockCapitalContent + "\n"+
                 yearPEHigh+'\n'+yearPELow+"\n"
                 +yearEPS+"\n"+yearPriceHigh+"\n"+yearPriceLow+"\n"
                 +incomeRatio+"\n"+revenueYoyList;
@@ -231,8 +241,7 @@ public class EstimatedRevenue {
         estimateLowestPrice = getStockYearPEAverage()[1]*estimateEPS;
         Log.d("EstimatedRevenue","getEstimateLowest:"+estimateLowestPrice);
 
-
-        estimateRiskRatio = Math.abs((estimateHighestPrice-currentPrice)/(currentPrice-estimateLowestPrice));
+        estimateRiskRatio = (estimateHighestPrice-currentPrice)/(currentPrice-estimateLowestPrice);
         return estimateLowestPrice;
     }
     public Double getRiskRatio(){return estimateRiskRatio;}

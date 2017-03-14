@@ -1,10 +1,13 @@
 package info.androidhive.retrofit.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.InputType;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -34,9 +37,11 @@ import info.androidhive.retrofit.util.NetIncomeFactory;
 import info.androidhive.retrofit.util.PriceContentFactory;
 import info.androidhive.retrofit.util.ReveneueFactory;
 
+import static android.R.attr.type;
+import static android.R.attr.y;
 import static android.util.Log.d;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -44,24 +49,28 @@ public class MainActivity extends AppCompatActivity {
     // TODO - insert your themoviedb.org API KEY here
     private final static String API_KEY = "7e8f60e325cd06e164799af1e317d7a7";
     EditText et_stockNum;
-    EditText et_stockPEHigh;
-    EditText et_stockPHLow;
+    int modifyValueType = 0;
+
     Button btn;
     RecyclerView recyclerView;
     Boolean isYoyOK = false;
     Boolean isIncomeOK = false;
     Boolean isPriceOK = false;
     EstimatedRevenue myEstimate;
-
     TextView estHighPrice;
     TextView estLowPrice;
     TextView stockPrice;
-    TextView peHigh;
-    TextView peLow;
+
     TextView tv_detail;
+    TextView estYoy;
+    TextView estIncomeRatio;
+
     TextView estEPS;
     TextView riskRatio;
     TextView tvLink;
+    TextView tvPEHigh;
+    TextView tvPELow;
+    TextView tvPECurrent;
 
     LinearLayout resultLayout;
     int okCount = 0;
@@ -88,8 +97,12 @@ public class MainActivity extends AppCompatActivity {
         et_stockNum = (EditText)findViewById(R.id.stockNum);
 
 
-
         // show result
+        tvPEHigh = (TextView) findViewById(R.id.tv_pe_high);
+        estYoy = (TextView) findViewById(R.id.tv_estimate_yoy);
+        estIncomeRatio = (TextView) findViewById(R.id.tv_estimate_income_ratio);
+        tvPELow = (TextView) findViewById(R.id.tv_pe_low);
+        tvPECurrent = (TextView) findViewById(R.id.tv_pe_current);
         estHighPrice = (TextView)findViewById(R.id.tv_est_high_price);
         estLowPrice = (TextView)findViewById(R.id.tv_est_low_price);
         stockPrice = (TextView)findViewById(R.id.stock_price);
@@ -204,117 +217,62 @@ public class MainActivity extends AppCompatActivity {
         final List<EstimatedRevenue> revenuesList = new ArrayList<>();
         myEstimate.getEstimateHighest();
         myEstimate.getEstimateLowest();
-
+        tvPEHigh.setText(String.format("%.2f", (double)myEstimate.getStockYearPEAverage()[0]));
+        tvPELow.setText(String.format("%.2f", (double)myEstimate.getStockYearPEAverage()[1]));
+        tvPECurrent.setText(String.format("%.2f", (double)myEstimate.getCurrentPrice()/myEstimate.getStockYearEps().get(0)));
         estHighPrice.setText(String.format("%.2f", (double)myEstimate.getEstimateHighest()));
         estLowPrice.setText(String.format("%.2f", (double)myEstimate.getEstimateLowestPrice()));
         stockPrice.setText(String.format("%.2f", (double)myEstimate.getCurrentPrice()));
         estEPS.setText(String.format("%.2f", (double)myEstimate.getEstimateEPS()));
         riskRatio.setText( String.format("%.2f", (double)myEstimate.getRiskRatio()));
         tv_detail.setText(myEstimate.getDetailContent());
+        estYoy.setText( String.format("%.2f", (double)myEstimate.getRevenueYoy()));
+        estIncomeRatio.setText( String.format("%.2f", (double)myEstimate.getIncomeRatioAverage()));
+
+        estYoy.setOnClickListener(this);
+        estIncomeRatio.setOnClickListener(this);
         resultLayout.setVisibility(View.VISIBLE);
 
 //        revenuesList.add(myEstimate);
 //        recyclerView.setAdapter(new StockRevenueAdapter(revenuesList, R.layout.list_item_movie, getApplicationContext()));
     }
 
-//    public void getRevenueQueryResult(String[] queryList) {
-//        final List<EstimatedRevenue> revenuesList = new ArrayList<>();
-//        ApiInterface apiService =  ApiClient.getClientWithXmlConverter().create(ApiInterface.class);
-//        for(int i=0; i<queryList.length; i++) {
-//            String BASE_URL = "http://data.xq.com.tw/jds/46/1/"+queryList[i].toString()+"/TW/GetTAData4Unit.jdxml?SID="+queryList[i].toString()+".TW&ST=1&a=10&b=10&c=20160201&f=0";
-//
-//            Call<StockQueryFactory.stockRevenue> call = apiService.getRevenueItem(QueryUrl.getStockRevenueUrl(2330,20160101,20170101));
-//            call.enqueue(new Callback<StockQueryFactory.stockRevenue>() {
-//                @Override
-//                public void onResponse(Call<StockQueryFactory.stockRevenue> call, Response<StockQueryFactory.stockRevenue> response) {
-//                    int statusCode = response.code();
-//                    StockQueryFactory.stockRevenue result = response.body();
-//
-//                    Log.e("statusCode",""+statusCode);
-//                    Log.e("item:","ID:"+result.getID());
-//
-//                    Double  totalRevenue = 0.0;
-//                    for(int j=0; j<3; j++) {
-//
-//                        Log.e("date:",result.getStockList().get(j).getDate());
-//                        Log.e("value:",result.getStockList().get(j).getValue1());
-//                        totalRevenue +=Double.parseDouble(result.getStockList().get(j).getValue1());
-//                    }
-//                    int myEstimateResult = (int)(totalRevenue/3/Double.parseDouble(result.getStockList().get(11).getValue1())*100 );
-//
-//                    Log.e("date:",result.getStockList().get(11).getDate());
-//                    Log.e("value:",result.getStockList().get(11).getValue1());
-//                    Log.e("date12:",result.getStockList().get(12).getDate());
-//                    Log.e("value12:",result.getStockList().get(12).getValue1());
-//                    Log.e("result:",myEstimateResult-100+"%");
-//                    int myCurrentResult = (int)(Double.parseDouble(result.getStockList().get(0).getValue1())/Double.parseDouble(result.getStockList().get(12).getValue1())*100 );
-//                    //EstimatedRevenue myEstimate = new EstimatedRevenue(result.getID(),myCurrentResult-100+"%",myEstimateResult-100+"%");
-//                    revenuesList.add(myEstimate);
-//                    recyclerView.setAdapter(new StockRevenueAdapter(revenuesList, R.layout.list_item_movie, getApplicationContext()));
-//                }
-//
-//                @Override
-//                public void onFailure(Call<StockQueryFactory.stockRevenue> call, Throwable t) {
-//                    // Log error here since request failed
-//                    Log.e(TAG, t.toString());
-//                }
-//            });
-//        }
-//
-//
-//    }
-//
-//
-//    public void getNetIncomeQueryResult() {
-//        ApiInterface apiService =  ApiClient.getClientWithXmlConverter().create(ApiInterface.class);
-//
-//        Call<StockQueryFactory.stockNetIncomeRatio> call = apiService.getNetIncomeRatioItem(QueryUrl.getStockNetIncomeUrl(2330,20160101,20170101));
-//        call.enqueue(new Callback<StockQueryFactory.stockNetIncomeRatio>() {
-//            @Override
-//            public void onResponse(Call<StockQueryFactory.stockNetIncomeRatio> call, Response<StockQueryFactory.stockNetIncomeRatio> response) {
-//                int statusCode = response.code();
-//                StockQueryFactory.stockNetIncomeRatio result = response.body();
-//
-//                Log.e("statusCode",""+statusCode);
-//                Log.e("item:","ID:"+result.getID());
-//
-//                Double  totalRevenue = 0.0;
-//                totalRevenue +=Double.parseDouble(result.getStockList().get(0).getValue1());
-//                Log.e("item:","totalRevenue:"+totalRevenue);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<StockQueryFactory.stockNetIncomeRatio> call, Throwable t) {
-//                // Log error here since request failed
-//                Log.e(TAG, t.toString());
-//            }
-//        });
-//    }
-//
-//
-//    public void getPriceContentQueryResult() {
-//        ApiInterface apiService =  ApiClient.getClientWithXmlConverter().create(ApiInterface.class);
-//
-//        Call<StockQueryFactory.stockPriceContent> call = apiService.getPriceContentItem(QueryUrl.getStockPriceContentUrl(2330,20160101,20170101));
-//        call.enqueue(new Callback<StockQueryFactory.stockPriceContent>() {
-//            @Override
-//            public void onResponse(Call<StockQueryFactory.stockPriceContent> call, Response<StockQueryFactory.stockPriceContent> response) {
-//                int statusCode = response.code();
-//                StockQueryFactory.stockPriceContent result = response.body();
-//
-//                Log.e("statusCode",""+statusCode);
-//                Log.e("item:","ID:"+result.getID());
-//
-//                Double  totalRevenue = 0.0;
-//                totalRevenue +=Double.parseDouble(result.getStockList().get(0).getClosePrice());
-//                Log.e("item:","totalRevenue:"+totalRevenue);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<StockQueryFactory.stockPriceContent> call, Throwable t) {
-//                // Log error here since request failed
-//                Log.e(TAG, t.toString());
-//            }
-//        });
-//    }
+    @Override
+    public void onClick(View v) {
+        showEditAlert(v);
+    }
+
+
+    private void showEditAlert(View v) {
+        String showString = "";
+        switch(v.getId()) {
+            case R.id.tv_estimate_yoy :
+                showString = "Modify Revenue Yoy (%)";
+                break;
+            case R.id.tv_estimate_income_ratio :
+                modifyValueType =1;
+                showString = "Modify Income Ratio(%)";
+                break;
+        }
+        // TODO Auto-generated method stub
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        builder.setView(input);
+        builder.setMessage(showString).setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(modifyValueType ==0) {
+                            myEstimate.setRevenueYoy(Double.parseDouble(input.getText().toString()));
+                        } else {
+                            myEstimate.setIncomeRatioAverage(Double.parseDouble(input.getText().toString()));
+                        }
+                        showResultAndUpdate();
+                    }
+                });
+        AlertDialog about_dialog = builder.create();
+        about_dialog.show();
+    }
+
 }
