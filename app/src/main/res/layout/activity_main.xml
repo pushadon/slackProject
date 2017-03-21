@@ -66,7 +66,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Estimated Yoy"/>
+                android:text="預估營收年增率"/>
             <TextView
                 android:layout_marginLeft="35dp"
                 android:id="@+id/tv_estimate_yoy"
@@ -82,7 +82,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Estimate Income Ratio"/>
+                android:text="預估稅後淨利率"/>
             <TextView
                 android:layout_marginLeft="35dp"
                 android:textColor="@color/colorRed"
@@ -98,7 +98,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="6 QUAR Average PE High"/>
+            android:text="6 Year Average PE High"/>
         <TextView
             android:layout_marginLeft="35dp"
             android:id="@+id/tv_pe_high"
@@ -115,7 +115,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="6 QUAR Average PE Low"/>
+            android:text="6 Year Average PE Low"/>
         <TextView
             android:layout_marginLeft="35dp"
             android:id="@+id/tv_pe_low"

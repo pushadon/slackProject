@@ -34,6 +34,9 @@ public class FinancialRatioFactory {
     public static String TAG = "FinancialRatioFactory";
 
     static List<Double> myYearEpsList= new ArrayList<>();
+    static List<Double> myIncomeRatioList= new ArrayList<>();
+
+
     static int epsTargetYear = 0;
     static int epsTargetMonth = 0;
     private static EventBus mEventBus;
@@ -43,6 +46,7 @@ public class FinancialRatioFactory {
     public static void getStockFinancialRatioQueryResult(int stockNum) {
         mEventBus = EventBus.getDefault();
         myYearEpsList.clear();
+        myIncomeRatioList.clear();
         ApiInterface apiService =  ApiClient.getClientWithGsonConverter().create(ApiInterface.class);
 
         Call<StockQueryFactory.stockFincialRatio> call = apiService.getFinanicalRationItem(QueryUrl.getStockFinanicalRatio(stockNum,20150101,0));
@@ -55,6 +59,8 @@ public class FinancialRatioFactory {
                 Log.e("Financial Result","dataYear:"+dataYear+"  dataMonth:"+dataMonth);
                 myYearEpsList = getQueryYearEpsList(response,dataYear,dataMonth);
                 Log.e("my Year List:",myYearEpsList.toString());
+                Log.e("my income list:",myIncomeRatioList.toString());
+
                 epsTargetYear = Integer.valueOf(dataYear);
                 epsTargetMonth = Integer.valueOf(dataMonth);
                 sendEvent();
@@ -63,12 +69,9 @@ public class FinancialRatioFactory {
 
             @Override
             public void onFailure(Call<StockQueryFactory.stockFincialRatio> call, Throwable t) {
-                // Log error here since request failed
                 Log.e(TAG, t.toString());
             }
         });
-
-
     }
 
     private static void sendEvent() {
@@ -76,6 +79,7 @@ public class FinancialRatioFactory {
         event.setYearEpsList(myYearEpsList);
         event.setEpsBaseMonth(epsTargetMonth);
         event.setEpsBaseYear(epsTargetYear);
+        event.setMyIncomeRatioList(myIncomeRatioList);
         mEventBus.post(event);
     }
 
@@ -86,11 +90,16 @@ public class FinancialRatioFactory {
             startIndex = Integer.valueOf(currentDataMonth)/3;
         }
         Double myYearEps = 0.0;
+        Double myQuarIncomeRatio = 0.0;
 
         for(int i=0; i<5; i++) {
             myYearEps =0.0;
-
+            myQuarIncomeRatio =Double.parseDouble(response.body().getRows().get(i).getRow().get(7).toString());
+            Log.e("cal income ratio date:",response.body().getRows().get(i).getRow().get(2).toString());
+            Log.e("cal income ratio :",response.body().getRows().get(i).getRow().get(7).toString());
+            myIncomeRatioList.add(myQuarIncomeRatio);
             for(int j=0; j<4; j++) {
+
                 myYearEps +=Double.parseDouble(response.body().getRows().get(startIndex+(4*i)+j).getRow().get(13).toString());
                 Log.e("cal year eps  date:",response.body().getRows().get(startIndex+(4*i)+j).getRow().get(2).toString());
                 Log.e("cal year eps  value:",response.body().getRows().get(startIndex+(4*i)+j).getRow().get(13).toString());
@@ -99,6 +108,16 @@ public class FinancialRatioFactory {
         }
 
         return myYearEpsList;
+    }
+
+    private static List<Double> getQueryIncomeRatio(Response<StockQueryFactory.stockFincialRatio> response) {
+        myIncomeRatioList = getQueryIncomeRatio(response);
+
+
+        for(int i=0; i<4; i++) {
+
+        }
+        return myIncomeRatioList;
     }
 
 }

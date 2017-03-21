@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 resultLayout.setVisibility(View.GONE);
                 tvLink.setText(Html.fromHtml("<a href=http://goodinfo.tw/StockInfo/ShowK_ChartFlow.asp?RPT_CAT=PER&STOCK_ID="+et_stockNum.getText().toString()+"&CHT_CAT=MONTH>"+et_stockNum.getText().toString()+"PE interval"));
                 tvLink.setMovementMethod(LinkMovementMethod.getInstance());
-                NetIncomeFactory.getNetIncomeQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
+                //NetIncomeFactory.getNetIncomeQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
                 //PriceContentFactory.getPriceContentQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
                 ReveneueFactory.getHalfYearAverageYoy(Integer.parseInt(et_stockNum.getText().toString()));
                 CapitalStockFactory.getStockCapitalQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         myEstimate.setStockYoyList(event.getRevenueYoyList());
         okCount++;
 
-        if(okCount == 5) {
+        if(okCount == 4) {
             showResultAndUpdate();
         }
     }
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         myEstimate.setIncomeRatioList(event.getIncomeRatioList());
         okCount++;
 
-        if(okCount == 5) {
+        if(okCount == 4) {
             showResultAndUpdate();
         }
     }
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         myEstimate.setStockCapital(event.getCapitalContent());
         okCount++;
 
-        if(okCount == 5) {
+        if(okCount == 4) {
             showResultAndUpdate();
         }
     }
@@ -186,9 +186,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onEvent(StockFinancialRatioEvent event) {
         d("Main totalYear",event.getYearEpsList().toString());
         myEstimate.setStockYearEps(event.getYearEpsList());
+        myEstimate.setIncomeRatioAverage(event.getIncomeRatioAverage());
+        myEstimate.setIncomeRatioList(event.getMyIncomeRatioList());
         PriceContentFactory.getRelatePriceAndSendEvent(Integer.parseInt(et_stockNum.getText().toString()),event.getEpsBaseYear(),event.getEpsBaseMonth());
         okCount++;
-        if(okCount == 5) {
+        if(okCount == 4) {
             showResultAndUpdate();
         }
     }
@@ -202,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         myEstimate.setStockYearPriceBond(event.getYearPriceBond());
         okCount++;
 
-        if(okCount == 5) {
+        if(okCount == 4) {
             showResultAndUpdate();
         }
     }

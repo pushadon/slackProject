@@ -61,13 +61,13 @@ public class PriceContentFactory {
                     if(tempPrice > yearHightesPrice)
                         yearHightesPrice = tempPrice;
                 }
-                Log.e("statusCode",""+statusCode);
-                Log.e("item:","ID:"+result.getID());
+                Log.e(TAG,"statusCode"+statusCode);
+                Log.e(TAG,"ID:"+result.getID());
 
 
-                Log.e("item:","yearLowestsPrice:"+yearLowestsPrice);
-                Log.e("item:","yearHightesPrice:"+yearHightesPrice);
-                Log.e("item:","todayPrice:"+currentPrice);
+                Log.e(TAG,"yearLowestsPrice:"+yearLowestsPrice);
+                Log.e(TAG,"yearHightesPrice:"+yearHightesPrice);
+                Log.e(TAG,"todayPrice:"+currentPrice);
                 //sendEvent();
                 //getRelatePriceAndSendEvent(targetYear,targetMonth);
             }
@@ -91,10 +91,9 @@ public class PriceContentFactory {
         queryYear = targetYear;
         if(targetMonth != 12)
             queryYear --;
-        Log.e("query year:",""+queryYear);
-
-        Log.e("query date",(queryYear-4)*10000+101+"");
-        Call<StockQueryFactory.stockPriceContent> call = apiService.getPriceContentItem(QueryUrl.getStockPriceContentUrl(stockNum,((targetYear-4)*10000)+101,0));
+        Log.e(TAG,"query year:"+queryYear);
+        Log.e(TAG,"query date"+((queryYear-4)*10000+101)+"");   // get four year high low price
+        Call<StockQueryFactory.stockPriceContent> call = apiService.getPriceContentItem(QueryUrl.getStockPriceContentUrl(stockNum,20090101,0));
         call.enqueue(new Callback<StockQueryFactory.stockPriceContent>() {
             @Override
             public void onResponse(Call<StockQueryFactory.stockPriceContent> call, Response<StockQueryFactory.stockPriceContent> response) {
@@ -103,13 +102,13 @@ public class PriceContentFactory {
                 Double tempHighPrice = 0.0;
                 Double tempPrice = 0.0;
                 currentPrice = Double.parseDouble(result.getStockList().get(0).getClosePrice());
-                Log.e("Year Price List", "Date:"+result.getStockList().get(0).getDate().substring(0,4));
+                Log.e(TAG, "Year Price List  Date:"+result.getStockList().get(0).getDate().substring(0,4));
                 int breakYear = queryYear-5;
 
                 for(int i=0; i<result.getStockList().size(); i++) {
-                    //Log.e("Year Price List", "break year:"+breakYear);
+                    //Log.e(TAG, "iiii:"+i);
 
-                    if(i<4) {
+                    if(i<12) {
                         tempPrice = Double.parseDouble(result.getStockList().get(i).getHightPrice());
                         if(tempPrice > yearHightesPrice)
                             yearHightesPrice = tempPrice;
@@ -121,20 +120,24 @@ public class PriceContentFactory {
                     }
 
                     if(Integer.valueOf(result.getStockList().get(i).getDate().substring(0,4)) == queryYear) {
-                        //Log.e("if loop", "Date:"+result.getStockList().get(i).getDate().toString());
+                        Log.e(TAG, " if loopDate:"+result.getStockList().get(i).getDate().toString());
 
                         tempPrice = Double.parseDouble(result.getStockList().get(i).getLowPrice());
                         if(tempPrice < tempLowPrice)
                             tempLowPrice = tempPrice;
-                        Log.e("Year Price List:","date:"+Double.parseDouble(result.getStockList().get(i).getHightPrice())+"high price:"+tempPrice);
+                        Log.e(TAG," Year Price List data:"+Double.parseDouble(result.getStockList().get(i).getHightPrice())+"high price:"+tempPrice);
                         tempPrice = Double.parseDouble(result.getStockList().get(i).getHightPrice());
 
                         if(tempPrice > tempHighPrice)
                             tempHighPrice = tempPrice;
                     } else {
+                        Log.e(TAG,"in else  query year: "+queryYear+"  break year:"+breakYear+ "  i:"+i+"  resultSize:"+result.getStockList().size() );
+
                         if(Integer.valueOf(result.getStockList().get(i).getDate().substring(0,4)) < queryYear || i == result.getStockList().size()-1) {
                             //Log.e("Year Price List", "Date:"+result.getStockList().get(i).getDate().substring(0,4));
                             queryYear--;
+                            Log.e(TAG,"query year: "+queryYear+"  break year:"+breakYear+ "  i:"+i+"  resultSize:"+result.getStockList().size() );
+
                             myYearPriceBondList.add(new Double[]{Double.parseDouble(result.getStockList().get(i-1).getDate().substring(0,4)),tempHighPrice, tempLowPrice});
                             if(breakYear == queryYear)
                                 break;
@@ -144,20 +147,20 @@ public class PriceContentFactory {
                             if(tempPrice < tempLowPrice)
                                 tempLowPrice = tempPrice;
                             tempPrice = Double.parseDouble(result.getStockList().get(i).getLowPrice());
-                            Log.e("Year Price List:","high price:"+tempPrice);
+                            Log.e(TAG,"Year Price List: high price:"+tempPrice);
 
                             if(tempPrice > tempHighPrice)
                                 tempHighPrice = tempPrice;
                         }
                     }
                 }
-                Log.e("item:","yearLowestsPrice:"+yearLowestsPrice);
-                Log.e("item:","yearHightesPrice:"+yearHightesPrice);
-                Log.e("item:","todayPrice:"+currentPrice);
+                Log.e(TAG,"yearLowestsPrice:"+yearLowestsPrice);
+                Log.e(TAG,"yearHightesPrice:"+yearHightesPrice);
+                Log.e(TAG,"todayPrice:"+currentPrice);
                 for(int i=0; i<myYearPriceBondList.size();i++) {
-                    Log.e("Year Price List","year :"+myYearPriceBondList.get(i)[0]);
-                    Log.e("Year Price List","year highest price:"+myYearPriceBondList.get(i)[1]);
-                    Log.e("Year Price List","year lowest price:"+myYearPriceBondList.get(i)[2]);
+                    Log.e(TAG,"year :"+myYearPriceBondList.get(i)[0]);
+                    Log.e(TAG,"year highest price:"+myYearPriceBondList.get(i)[1]);
+                    Log.e(TAG,"year lowest price:"+myYearPriceBondList.get(i)[2]);
 
                 }
                 sendEvent();

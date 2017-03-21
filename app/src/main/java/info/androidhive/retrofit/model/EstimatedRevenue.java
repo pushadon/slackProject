@@ -69,13 +69,18 @@ public class EstimatedRevenue {
         String yearPriceHigh = "Year Price H:";
         String yearPriceLow =  "Year Price L :";
         String revenueYoyList = "Month YOY:";
+        Log.e("crashSize:","stockYearEps:"+stockYearEps.size());
+        Log.e("crashSize:","stockYearPriceBond:"+stockYearPriceBond.size());
 
         for(int i=0; i<stockYearEps.size();i++) {
-            yearPEHigh += "  "+String.format( "%.2f", stockYearPriceBond.get(i)[1]/stockYearEps.get(i) );
-            yearPELow  += "  "+String.format( "%.2f", stockYearPriceBond.get(i)[2]/stockYearEps.get(i) );
-            yearEPS += "  "+String.format( "%.2f", stockYearEps.get(i));
-            yearPriceHigh += "  "+String.format( "%.2f", stockYearPriceBond.get(i)[1]);
-            yearPriceLow += "  "+String.format( "%.2f", stockYearPriceBond.get(i)[2]);
+            if(i<stockYearEps.size() && i<stockYearPriceBond.size()) {
+                yearPEHigh += "  "+String.format( "%.2f", stockYearPriceBond.get(i)[1]/stockYearEps.get(i) );
+                yearPELow  += "  "+String.format( "%.2f", stockYearPriceBond.get(i)[2]/stockYearEps.get(i) );
+                yearEPS += "  "+String.format( "%.2f", stockYearEps.get(i));
+                yearPriceHigh += "  "+String.format( "%.2f", stockYearPriceBond.get(i)[1]);
+                yearPriceLow += "  "+String.format( "%.2f", stockYearPriceBond.get(i)[2]);
+            }
+
         }
         for (int i=0; i<stockYoyList.size(); i++){
             revenueYoyList += "  "+String.format( "%.2f", stockYoyList.get(i));
@@ -242,6 +247,8 @@ public class EstimatedRevenue {
         Log.d("EstimatedRevenue","getEstimateLowest:"+estimateLowestPrice);
 
         estimateRiskRatio = (estimateHighestPrice-currentPrice)/(currentPrice-estimateLowestPrice);
+        if(estimateHighestPrice-currentPrice <0)
+            estimateRiskRatio = 0.0;
         return estimateLowestPrice;
     }
     public Double getRiskRatio(){return estimateRiskRatio;}
