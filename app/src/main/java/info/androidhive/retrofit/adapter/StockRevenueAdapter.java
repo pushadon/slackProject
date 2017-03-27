@@ -1,10 +1,7 @@
 package info.androidhive.retrofit.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,14 +15,14 @@ import info.androidhive.retrofit.model.EstimatedRevenue;
  */
 
 
-public class StockRevenueAdapter extends RecyclerView.Adapter<StockRevenueAdapter.StockRevenueHolder> {
+public class StockRevenueAdapter {
 
     private List<EstimatedRevenue> stockItem;
     private int rowLayout;
     private Context context;
 
 
-    public static class StockRevenueHolder extends RecyclerView.ViewHolder {
+    public static class StockRevenueHolder  {
         LinearLayout moviesLayout;
         TextView stockNumber;
         TextView stockNextMonthRevenue;
@@ -35,7 +32,6 @@ public class StockRevenueAdapter extends RecyclerView.Adapter<StockRevenueAdapte
 
 
         public StockRevenueHolder(View v) {
-            super(v);
             moviesLayout = (LinearLayout) v.findViewById(R.id.movies_layout);
             stockNumber = (TextView) v.findViewById(R.id.title);
             stockNextMonthRevenue = (TextView) v.findViewById(R.id.subtitle);
@@ -51,25 +47,5 @@ public class StockRevenueAdapter extends RecyclerView.Adapter<StockRevenueAdapte
         this.context = context;
     }
 
-    @Override
-    public StockRevenueAdapter.StockRevenueHolder onCreateViewHolder(ViewGroup parent,
-                                                            int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-        return new StockRevenueHolder(view);
-    }
 
-
-    @Override
-    public void onBindViewHolder(StockRevenueHolder holder, final int position) {
-       //
-        // holder.stockNumber.setText(stockItem.get(position).getStockName());
-        //holder.stockNextMonthRevenue.setText("Next month estimate revenue YOY "+stockItem.get(position).getEstimateRevenue());
-       // holder.currentYoy.setText("Current month revenue YOY "+stockItem.get(position).getCurrentYoy());
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return stockItem.size();
-    }
 }

@@ -1,229 +1,37 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:id="@+id/main_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".activity.MainActivity">
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="stockNumber"/>
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2330"
-            android:id="@+id/stockNum" />
-        <Button
-            android:text="Send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/editText"
-            android:layout_toEndOf="@+id/editText"
-            android:layout_marginLeft="38dp"
-            android:layout_marginStart="38dp"
-            android:id="@+id/send" />
-    </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_link"/>
-
-
-
-    <LinearLayout
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="35dp"
-        android:id="@+id/resultLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Current Price"/>
-        <TextView
-            android:layout_marginLeft="35dp"
-            android:id="@+id/stock_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="12"/>
-    </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="預估營收年增率"/>
-            <TextView
-                android:layout_marginLeft="35dp"
-                android:id="@+id/tv_estimate_yoy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorRed"
-                android:text="12"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="預估稅後淨利率"/>
-            <TextView
-                android:layout_marginLeft="35dp"
-                android:textColor="@color/colorRed"
-                android:id="@+id/tv_estimate_income_ratio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="12"/>
-        </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="6 Year Average PE High"/>
-        <TextView
-            android:layout_marginLeft="35dp"
-            android:id="@+id/tv_pe_high"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="12"/>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="6 Year Average PE Low"/>
-        <TextView
-            android:layout_marginLeft="35dp"
-            android:id="@+id/tv_pe_low"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="12"/>
-    </LinearLayout>
-
-
-    <LinearLayout
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:orientation="horizontal">
-         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Current PE"/>
-         <TextView
-            android:layout_marginLeft="35dp"
-            android:id="@+id/tv_pe_current"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="12"/>
-    </LinearLayout>
-
-        <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Estimated EPS"/>
-        <TextView
-            android:layout_marginLeft="35dp"
-            android:id="@+id/tv_eps"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="12"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Estimated Low Price"/>
-        <TextView
-            android:layout_marginLeft="35dp"
-            android:id="@+id/tv_est_low_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="12"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Estimated High Price"/>
-        <TextView
-            android:layout_marginLeft="35dp"
-            android:id="@+id/tv_est_high_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="12"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Risk Ratio"/>
-        <TextView
-            android:layout_marginLeft="35dp"
-            android:id="@+id/tv_risk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="12"/>
-
-    </LinearLayout>
-</LinearLayout>
-
-    <TextView
-        android:layout_marginLeft="35dp"
-        android:id="@+id/tv_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/movies_recycler_view"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:layout_below="@+id/editText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:elevation="6dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:background="?attr/colorPrimary"
+        android:elevation="6dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/tab_layout"/>
 
-
-</LinearLayout>
+</RelativeLayout>
