@@ -14,20 +14,17 @@ import info.androidhive.retrofit.R;
 
 public class MainActivity extends AppCompatActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_main);
         Button btnSend = (Button)findViewById(R.id.send);
-        EditText etStockNum = (EditText) findViewById(R.id.stockNum) ;
+        final EditText etStockNum = (EditText) findViewById(R.id.stockNum) ;
         btnSend.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Intent newAct = new Intent();
-                newAct.set
+                newAct.putExtra("STOCK_NUM",etStockNum.getText().toString());
                 newAct.setClass(MainActivity.this,StockInfoActivity.class);
                 startActivity(newAct);
             }

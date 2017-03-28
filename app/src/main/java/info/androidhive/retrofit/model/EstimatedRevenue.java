@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public class EstimatedRevenue {
-
+    private String TAG = EstimatedRevenue.class.toString();
     public Double getCurrentPrice() {
         return currentPrice;
     }
@@ -33,6 +33,30 @@ public class EstimatedRevenue {
     private List<Double> stockYearEps;
     private List<Double[]> stockYearPriceBond; // [0]date [1]high [2] low
     private Double[] stockYearPEAverage;
+    private Double stockYearPEHigh = 0.0;
+    private Double stockYearPELow = 0.0;
+
+
+    public void setStockYearPEHigh(Double stockYearPEHigh) {
+        this.stockYearPEHigh = stockYearPEHigh;
+    }
+
+    public void setStockYearPELow(Double stockYearPELow) {
+        this.stockYearPELow = stockYearPELow;
+    }
+    public Double getStockYearPEHigh() {
+        Log.e(TAG,"getStockYearPEHigh:"+stockYearPEHigh);
+        if(stockYearPEHigh == 0.0)
+            getStockYearPEAverage();
+        return stockYearPEHigh;
+    }
+
+    public Double getStockYearPELow() {
+        if(stockYearPELow == 0.0)
+            getStockYearPEAverage();
+        return stockYearPELow;
+    }
+
 
     public void setStockYoyList(List<Double> stockYoyList) {
         this.stockYoyList = stockYoyList;
@@ -45,20 +69,28 @@ public class EstimatedRevenue {
         if(stockYearEps.size() == stockYearPriceBond.size()) {
             double totalPEhigh = 0.0;
             double totalPElow = 0.0;
+            int peHighCount = 0;
+            int peLowCount = 0;
             for(int i=0; i<stockYearEps.size();i++) {
-                totalPEhigh += stockYearPriceBond.get(i)[1]/stockYearEps.get(i);
-                totalPElow += stockYearPriceBond.get(i)[2]/stockYearEps.get(i);
+                if(stockYearPriceBond.get(i)[1]/stockYearEps.get(i) >0) {
+                    peHighCount++;
+                    totalPEhigh += stockYearPriceBond.get(i)[1]/stockYearEps.get(i);
+                }
+                if(stockYearPriceBond.get(i)[2]/stockYearEps.get(i) >0) {
+                    peLowCount++;
+                    totalPElow += stockYearPriceBond.get(i)[2]/stockYearEps.get(i);
+                }
                 Log.e("estimate PE date:",""+stockYearPriceBond.get(i)[0]);
 
                 Log.e("estimate PE high:",""+stockYearPriceBond.get(i)[1]/stockYearEps.get(i));
                 Log.e("estimate PE low",""+stockYearPriceBond.get(i)[2]/stockYearEps.get(i));
             }
-            stockYearPEAverage = new Double[] { totalPEhigh/stockYearEps.size(),totalPElow/stockYearEps.size()};
+            stockYearPEAverage = new Double[] { totalPEhigh/peHighCount,totalPElow/peLowCount};
+            setStockYearPEHigh(stockYearPEAverage[0]);
+            setStockYearPELow(stockYearPEAverage[1]);
         }
         return stockYearPEAverage;
     }
-
-
 
     public String getDetailContent() {
         String yearPEHigh = "PE high :";
@@ -231,7 +263,7 @@ public class EstimatedRevenue {
 
 
         estimateEPS = yearReveneue*incomeRatioAverage/100*(1+revenueYoy/100)*10/ stockCapitalContent;
-        estimateHighestPrice = getStockYearPEAverage()[0]*estimateEPS;
+        estimateHighestPrice = getStockYearPEHigh()*estimateEPS;
         Log.d("EstimatedRevenue","getEstimateHighest:"+estimateHighestPrice);
 
         return estimateHighestPrice;
@@ -243,12 +275,14 @@ public class EstimatedRevenue {
         Log.e("EstimateLowest", "stockCapitalContent:"+ stockCapitalContent);
         Log.e("EstimateLowest", "yearReveneue:"+yearReveneue);
         Log.e("EstimateLowest", "revenueYoy:"+(1+revenueYoy/100));
-        estimateLowestPrice = getStockYearPEAverage()[1]*estimateEPS;
+        estimateLowestPrice = getStockYearPELow()*estimateEPS;
         Log.d("EstimatedRevenue","getEstimateLowest:"+estimateLowestPrice);
 
         estimateRiskRatio = (estimateHighestPrice-currentPrice)/(currentPrice-estimateLowestPrice);
         if(estimateHighestPrice-currentPrice <0)
             estimateRiskRatio = 0.0;
+        if(estimateHighestPrice-currentPrice >0 && estimateLowestPrice -currentPrice >0)
+            estimateRiskRatio = 1000.0;
         return estimateLowestPrice;
     }
     public Double getRiskRatio(){return estimateRiskRatio;}

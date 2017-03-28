@@ -1,12 +1,10 @@
 package info.androidhive.retrofit.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Window;
-import android.view.WindowManager;
 
 
 import info.androidhive.retrofit.R;
@@ -17,16 +15,18 @@ public class StockInfoActivity extends AppCompatActivity {
 
 
     private TabLayout mTab;
+    private static String mStockNum;
+
+    public static String getStockNum() {
+        return mStockNum;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_main);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_stock_info);
+        Intent intent = getIntent();
+        mStockNum = intent.getStringExtra("STOCK_NUM");
         mTab = (TabLayout) findViewById(R.id.tab_layout);
         mTab.addTab(mTab.newTab().setText("Stock Value"));
         mTab.addTab(mTab.newTab().setText("Plot"));
@@ -54,5 +54,7 @@ public class StockInfoActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 }

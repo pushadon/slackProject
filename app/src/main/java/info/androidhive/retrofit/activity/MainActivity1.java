@@ -225,6 +225,8 @@ public class MainActivity1 extends AppCompatActivity implements View.OnClickList
 
         estYoy.setOnClickListener(this);
         estIncomeRatio.setOnClickListener(this);
+        tvPEHigh.setOnClickListener(this);
+        tvPELow.setOnClickListener(this);
         resultLayout.setVisibility(View.VISIBLE);
 
 //        revenuesList.add(myEstimate);
@@ -247,6 +249,14 @@ public class MainActivity1 extends AppCompatActivity implements View.OnClickList
                 modifyValueType =1;
                 showString = "Modify Income Ratio(%)";
                 break;
+            case R.id.tv_pe_high:
+                modifyValueType =2;
+                showString = "Modify PE High";
+                break;
+            case R.id.tv_pe_low:
+                modifyValueType = 3;
+                showString = "Modify PE Low";
+                break;
         }
         // TODO Auto-generated method stub
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -259,8 +269,12 @@ public class MainActivity1 extends AppCompatActivity implements View.OnClickList
                     public void onClick(DialogInterface dialog, int which) {
                         if(modifyValueType ==0) {
                             myEstimate.setRevenueYoy(Double.parseDouble(input.getText().toString()));
-                        } else {
+                        } else if(modifyValueType ==1){
                             myEstimate.setIncomeRatioAverage(Double.parseDouble(input.getText().toString()));
+                        } else if(modifyValueType ==2){
+                            myEstimate.setHistoryPEHigh(Double.parseDouble(input.getText().toString()));
+                        } else if(modifyValueType ==3){
+                            myEstimate.setHistoryPELow(Double.parseDouble(input.getText().toString()));
                         }
                         showResultAndUpdate();
                     }

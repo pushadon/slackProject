@@ -28,6 +28,7 @@ import java.util.List;
 
 import info.androidhive.retrofit.R;
 import info.androidhive.retrofit.activity.MainActivity1;
+import info.androidhive.retrofit.activity.StockInfoActivity;
 import info.androidhive.retrofit.event.StockCapitalEvent;
 import info.androidhive.retrofit.event.StockFinancialRatioEvent;
 import info.androidhive.retrofit.event.StockIncomeRatioEvent;
@@ -89,7 +90,7 @@ public class StockValueFragment extends Fragment implements View.OnClickListener
     TextView tvPEHigh;
     TextView tvPELow;
     TextView tvPECurrent;
-
+    String mStockNum;
     LinearLayout resultLayout;
     int okCount = 0;
     private OnFragmentInteractionListener mListener;
@@ -113,7 +114,6 @@ public class StockValueFragment extends Fragment implements View.OnClickListener
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
-
         return fragment;
     }
     @Override
@@ -158,25 +158,17 @@ public class StockValueFragment extends Fragment implements View.OnClickListener
         tvLink = (TextView) getView().findViewById(R.id.tv_link);
         resultLayout = (LinearLayout)getView().findViewById(R.id.resultLayout);
 
-
-
-        btn = (Button) getView().findViewById(R.id.send);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                okCount = 0;
-                resultLayout.setVisibility(View.GONE);
-                tvLink.setText(Html.fromHtml("<a href=http://goodinfo.tw/StockInfo/ShowK_ChartFlow.asp?RPT_CAT=PER&STOCK_ID="+et_stockNum.getText().toString()+"&CHT_CAT=MONTH>"+et_stockNum.getText().toString()+"PE interval"));
-                tvLink.setMovementMethod(LinkMovementMethod.getInstance());
-                //NetIncomeFactory.getNetIncomeQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
-                //PriceContentFactory.getPriceContentQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
-                ReveneueFactory.getHalfYearAverageYoy(Integer.parseInt(et_stockNum.getText().toString()));
-                CapitalStockFactory.getStockCapitalQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
-                FinancialRatioFactory.getStockFinancialRatioQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
-                myEstimate.setStockName(et_stockNum.getText().toString());
-
-            }
-        });
+        mStockNum = StockInfoActivity.getStockNum();
+        okCount = 0;
+        resultLayout.setVisibility(View.GONE);
+        tvLink.setText(Html.fromHtml("<a href=http://goodinfo.tw/StockInfo/ShowK_ChartFlow.asp?RPT_CAT=PER&STOCK_ID="+mStockNum+"&CHT_CAT=MONTH>"+mStockNum+"PE interval"));
+        tvLink.setMovementMethod(LinkMovementMethod.getInstance());
+        //NetIncomeFactory.getNetIncomeQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
+        //PriceContentFactory.getPriceContentQueryResult(Integer.parseInt(et_stockNum.getText().toString()));
+        ReveneueFactory.getHalfYearAverageYoy(Integer.parseInt(mStockNum));
+        CapitalStockFactory.getStockCapitalQueryResult(Integer.parseInt(mStockNum));
+        FinancialRatioFactory.getStockFinancialRatioQueryResult(Integer.parseInt(mStockNum));
+        myEstimate.setStockName(mStockNum);
 
         if (API_KEY.isEmpty()) {
             Toast.makeText(getActivity(), "Please obtain your API KEY from themoviedb.org first!", Toast.LENGTH_LONG).show();
@@ -232,7 +224,7 @@ public class StockValueFragment extends Fragment implements View.OnClickListener
         myEstimate.setStockYearEps(event.getYearEpsList());
         myEstimate.setIncomeRatioAverage(event.getIncomeRatioAverage());
         myEstimate.setIncomeRatioList(event.getMyIncomeRatioList());
-        PriceContentFactory.getRelatePriceAndSendEvent(Integer.parseInt(et_stockNum.getText().toString()),event.getEpsBaseYear(),event.getEpsBaseMonth());
+        PriceContentFactory.getRelatePriceAndSendEvent(Integer.parseInt(mStockNum),event.getEpsBaseYear(),event.getEpsBaseMonth());
         okCount++;
         if(okCount == 4) {
             showResultAndUpdate();
@@ -262,20 +254,36 @@ public class StockValueFragment extends Fragment implements View.OnClickListener
         final List<EstimatedRevenue> revenuesList = new ArrayList<>();
         myEstimate.getEstimateHighest();
         myEstimate.getEstimateLowest();
-        tvPEHigh.setText(String.format("%.2f", (double)myEstimate.getStockYearPEAverage()[0]));
-        tvPELow.setText(String.format("%.2f", (double)myEstimate.getStockYearPEAverage()[1]));
+        tvPEHigh.setText(String.format("%.2f", (double)myEstimate.getStockYearPEHigh()));
+        tvPELow.setText(String.format("%.2f", (double)myEstimate.getStockYearPELow()));
         tvPECurrent.setText(String.format("%.2f", (double)myEstimate.getCurrentPrice()/myEstimate.getStockYearEps().get(0)));
-        estHighPrice.setText(String.format("%.2f", (double)myEstimate.getEstimateHighest()));
-        estLowPrice.setText(String.format("%.2f", (double)myEstimate.getEstimateLowestPrice()));
+        if(myEstimate.getEstimateHighest() >0) {
+            estHighPrice.setText(String.format("%.2f", (double)myEstimate.getEstimateHighest()));
+        } else {
+            estHighPrice.setText(" can't estimate");
+        }
+        if(myEstimate.getEstimateLowest() >0) {
+            estLowPrice.setText(String.format("%.2f", (double)myEstimate.getEstimateLowestPrice()));
+        } else {
+            estLowPrice.setText(" can't estimate");
+        }
         stockPrice.setText(String.format("%.2f", (double)myEstimate.getCurrentPrice()));
         estEPS.setText(String.format("%.2f", (double)myEstimate.getEstimateEPS()));
-        riskRatio.setText( String.format("%.2f", (double)myEstimate.getRiskRatio()));
+        if(myEstimate.getRiskRatio() >100) {
+            riskRatio.setText("no risk");
+        } else if(myEstimate.getRiskRatio() == 0) {
+            riskRatio.setText("no reward");
+        } else {
+            riskRatio.setText( String.format("%.2f", (double)myEstimate.getRiskRatio()));
+        }
         tv_detail.setText(myEstimate.getDetailContent());
         estYoy.setText( String.format("%.2f", (double)myEstimate.getRevenueYoy()));
         estIncomeRatio.setText( String.format("%.2f", (double)myEstimate.getIncomeRatioAverage()));
 
         estYoy.setOnClickListener(this);
         estIncomeRatio.setOnClickListener(this);
+        tvPEHigh.setOnClickListener(this);
+        tvPELow.setOnClickListener(this);
         resultLayout.setVisibility(View.VISIBLE);
 
 //        revenuesList.add(myEstimate);
@@ -335,6 +343,14 @@ public class StockValueFragment extends Fragment implements View.OnClickListener
                 modifyValueType =1;
                 showString = "Modify Income Ratio(%)";
                 break;
+            case R.id.tv_pe_high:
+                modifyValueType =2;
+                showString = "Modify PE High";
+                break;
+            case R.id.tv_pe_low:
+                modifyValueType = 3;
+                showString = "Modify PE Low";
+                break;
         }
         // TODO Auto-generated method stub
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -347,8 +363,12 @@ public class StockValueFragment extends Fragment implements View.OnClickListener
                     public void onClick(DialogInterface dialog, int which) {
                         if(modifyValueType ==0) {
                             myEstimate.setRevenueYoy(Double.parseDouble(input.getText().toString()));
-                        } else {
+                        } else if(modifyValueType ==1){
                             myEstimate.setIncomeRatioAverage(Double.parseDouble(input.getText().toString()));
+                        } else if(modifyValueType ==2){
+                            myEstimate.setStockYearPEHigh(Double.parseDouble(input.getText().toString()));
+                        } else if(modifyValueType ==3){
+                            myEstimate.setStockYearPELow(Double.parseDouble(input.getText().toString()));
                         }
                         showResultAndUpdate();
                     }
