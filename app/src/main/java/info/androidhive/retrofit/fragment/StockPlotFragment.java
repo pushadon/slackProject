@@ -43,7 +43,7 @@ import info.androidhive.retrofit.R;
 
 // https://github.com/PhilJay/MPAndroidChart/blob/master/MPChartExample/src/com/xxmassdeveloper/mpchartexample/CubicLineChartActivity.java
 
-    
+
 public class StockPlotFragment extends Fragment implements SeekBar.OnSeekBarChangeListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
