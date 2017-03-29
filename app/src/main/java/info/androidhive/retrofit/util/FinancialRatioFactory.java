@@ -4,26 +4,16 @@ import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import info.androidhive.retrofit.event.StockCapitalEvent;
 import info.androidhive.retrofit.event.StockFinancialRatioEvent;
-import info.androidhive.retrofit.model.StockFinancialRatioItem;
 import info.androidhive.retrofit.model.StockQueryFactory;
 import info.androidhive.retrofit.rest.ApiClient;
 import info.androidhive.retrofit.rest.ApiInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static info.androidhive.retrofit.R.id.stockNum;
-import static info.androidhive.retrofit.util.CapitalStockFactory.capitcalStockContent;
-import static info.androidhive.retrofit.util.PriceContentFactory.yearHightesPrice;
-import static info.androidhive.retrofit.util.PriceContentFactory.yearLowestsPrice;
 
 /**
  * Created by Don_Chiang on 2017/3/6.
@@ -49,11 +39,11 @@ public class FinancialRatioFactory {
         myIncomeRatioList.clear();
         ApiInterface apiService =  ApiClient.getClientWithGsonConverter().create(ApiInterface.class);
 
-        Call<StockQueryFactory.stockFincialRatio> call = apiService.getFinanicalRationItem(QueryUrl.getStockFinanicalRatio(stockNum,20150101,0));
-        call.enqueue(new Callback<StockQueryFactory.stockFincialRatio>() {
+        Call<StockQueryFactory.stockFinancialRatio> call = apiService.getFinanicalRationItem(QueryUrl.getStockFinanicalRatio(stockNum,20150101,0));
+        call.enqueue(new Callback<StockQueryFactory.stockFinancialRatio>() {
             @Override
-            public void onResponse(Call<StockQueryFactory.stockFincialRatio> call, Response<StockQueryFactory.stockFincialRatio> response) {
-                StockQueryFactory.stockFincialRatio result = response.body();
+            public void onResponse(Call<StockQueryFactory.stockFinancialRatio> call, Response<StockQueryFactory.stockFinancialRatio> response) {
+                StockQueryFactory.stockFinancialRatio result = response.body();
                 String dataYear = result.getRows().get(0).getRow().get(2).split("/")[0];
                 String dataMonth = result.getRows().get(0).getRow().get(2).split("/")[1];
                 Log.e("Financial Result","dataYear:"+dataYear+"  dataMonth:"+dataMonth);
@@ -68,7 +58,7 @@ public class FinancialRatioFactory {
             }
 
             @Override
-            public void onFailure(Call<StockQueryFactory.stockFincialRatio> call, Throwable t) {
+            public void onFailure(Call<StockQueryFactory.stockFinancialRatio> call, Throwable t) {
                 Log.e(TAG, t.toString());
             }
         });
@@ -83,7 +73,7 @@ public class FinancialRatioFactory {
         mEventBus.post(event);
     }
 
-    private static List<Double> getQueryYearEpsList(Response<StockQueryFactory.stockFincialRatio> response, String currentDateYear, String currentDataMonth) {
+    private static List<Double> getQueryYearEpsList(Response<StockQueryFactory.stockFinancialRatio> response, String currentDateYear, String currentDataMonth) {
         int startIndex = 0;
 
         if(Integer.valueOf(currentDataMonth) != 12) {
@@ -110,7 +100,7 @@ public class FinancialRatioFactory {
         return myYearEpsList;
     }
 
-    private static List<Double> getQueryIncomeRatio(Response<StockQueryFactory.stockFincialRatio> response) {
+    private static List<Double> getQueryIncomeRatio(Response<StockQueryFactory.stockFinancialRatio> response) {
         myIncomeRatioList = getQueryIncomeRatio(response);
 
 

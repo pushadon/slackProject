@@ -170,10 +170,6 @@ public class StockValueFragment extends Fragment implements View.OnClickListener
         FinancialRatioFactory.getStockFinancialRatioQueryResult(Integer.parseInt(mStockNum));
         myEstimate.setStockName(mStockNum);
 
-        if (API_KEY.isEmpty()) {
-            Toast.makeText(getActivity(), "Please obtain your API KEY from themoviedb.org first!", Toast.LENGTH_LONG).show();
-            return;
-        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

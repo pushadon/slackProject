@@ -207,7 +207,7 @@ public  class StockQueryFactory {
 
     }
 
-    public static class stockFincialRatio {
+    public static class stockFinancialRatio {
         @SerializedName("rows")
         @Expose
         private List<StockFinancialRatioItem> rows = null;

@@ -30,6 +30,9 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 
 import info.androidhive.retrofit.R;
+import info.androidhive.retrofit.activity.StockInfoActivity;
+import info.androidhive.retrofit.util.CashFlowInfoFactory;
+import info.androidhive.retrofit.util.FinancialRatioFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,10 +55,11 @@ public class StockPlotFragment extends Fragment implements SeekBar.OnSeekBarChan
     private LineChart mChart;
     private SeekBar mSeekBarX, mSeekBarY;
     private TextView tvX, tvY;
-
+    private String TAG = StockPlotFragment.class.toString();
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String mStockNum;
 
     private OnFragmentInteractionListener mListener;
 
@@ -106,6 +110,10 @@ public class StockPlotFragment extends Fragment implements SeekBar.OnSeekBarChan
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mStockNum = StockInfoActivity.getStockNum();
+
+        CashFlowInfoFactory.getCashFlowInfoQueryResult(Integer.parseInt(mStockNum));
+
         tvX = (TextView) getView().findViewById(R.id.tvXMax);
         tvY = (TextView) getView().findViewById(R.id.tvYMax);
 
