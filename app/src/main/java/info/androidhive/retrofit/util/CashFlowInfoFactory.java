@@ -7,6 +7,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
+import info.androidhive.retrofit.event.StockCashFlowInfoEvent;
 import info.androidhive.retrofit.event.StockFinancialRatioEvent;
 import info.androidhive.retrofit.model.StockQueryFactory;
 import info.androidhive.retrofit.rest.ApiClient;
@@ -23,33 +24,29 @@ public class CashFlowInfoFactory {
 
     public static String TAG = "CashFlowInfoFactory";
 
-    static List<Double> myYearEpsList= new ArrayList<>();
-    static List<Double> myIncomeRatioList= new ArrayList<>();
+    static List<Double> mCashFlowQuarArray= new ArrayList<>();
 
 
-    static int epsTargetYear = 0;
-    static int epsTargetMonth = 0;
     private static EventBus mEventBus;
-    static int queryYear = 0;
 
 
     public static void getCashFlowInfoQueryResult(int stockNum) {
         mEventBus = EventBus.getDefault();
-        myYearEpsList.clear();
-        myIncomeRatioList.clear();
+        mCashFlowQuarArray.clear();
         ApiInterface apiService =  ApiClient.getClientWithGsonConverter().create(ApiInterface.class);
         Log.e(TAG,"stockNum:"+stockNum);
 
-        Call<StockQueryFactory.stockFinancialRatio> call = apiService.getFinanicalRationItem(QueryUrl.getStockCashFlowInfo(stockNum,20150101,0));
+        Call<StockQueryFactory.stockFinancialRatio> call = apiService.getFinanicalRationItem(QueryUrl.getStockCashFlowInfoUrl(stockNum,20150101,0));
         call.enqueue(new Callback<StockQueryFactory.stockFinancialRatio>() {
             @Override
             public void onResponse(Call<StockQueryFactory.stockFinancialRatio> call, Response<StockQueryFactory.stockFinancialRatio> response) {
                 StockQueryFactory.stockFinancialRatio result = response.body();
-                //String dataYear = result.getRows().get(0).getRow().get(2).split("/")[0];
-                //String dataMonth = result.getRows().get(0).getRow().get(2).split("/")[1];
-                Log.e(TAG,"Date:"+result.getRows().get(0).getRow().get(2).toString());
-
-                //sendEvent();
+                for(int i=0; i<4; i++) {
+                    Log.e(TAG,"Date:"+result.getRows().get(i).getRow().get(2).toString());
+                    Log.e(TAG,"CashFlow:"+result.getRows().get(i).getRow().get(18).toString());
+                    mCashFlowQuarArray.add(Double.parseDouble(result.getRows().get(i).getRow().get(18).toString()));
+                }
+                sendEvent();
 
             }
 
@@ -59,15 +56,9 @@ public class CashFlowInfoFactory {
             }
         });
     }
-
     private static void sendEvent() {
-        StockFinancialRatioEvent event = new StockFinancialRatioEvent();
-        event.setYearEpsList(myYearEpsList);
-        event.setEpsBaseMonth(epsTargetMonth);
-        event.setEpsBaseYear(epsTargetYear);
-        event.setMyIncomeRatioList(myIncomeRatioList);
+        StockCashFlowInfoEvent event = new StockCashFlowInfoEvent();
+        event.setMyQuarCashFlowOfYear(mCashFlowQuarArray);
         mEventBus.post(event);
     }
-
-
 }

@@ -30,13 +30,18 @@ public class QueryUrl {
         String finanicalRatioUrl = "http://data.xq.com.tw/Z/XQWEB2011/DATA/JVO2.xdjjs?A=46&B=1&C=05205&P="+stockNum+".TW|Q&Lang=TW";
         return finanicalRatioUrl;
     }
-
-    public static String getStockCashFlowInfo(int stockNum, int startDate, int endDate) {
-        String cashFlowInfoUrl = "http://data.xq.com.tw/Z/XQWEB2011/DATA/JVO2.xdjjs?A=46&B=1&C=04709&P="+stockNum+".TW|Q&Lang=TW";
+    //現金流量
+    public static String getStockCashFlowInfoUrl(int stockNum, int startDate, int endDate) {
+        String cashFlowInfoUrl = "http://data.xq.com.tw/Z/XQWEB2011/DATA/JVO2.xdjjs?A=46&B=1&C=04809&P="+stockNum+".TW|Q&Lang=TW";
         return cashFlowInfoUrl;
     }
-
-    public static String getStockBalanceSheet(int stockNum, int startDate, int endDate) {
+    //損益表
+    public static String getStockIncomeStatementInfoUrl(int stockNum, int startDate, int endDate) {
+        String incomeStatementInfoUrl = "http://data.xq.com.tw/Z/XQWEB2011/DATA/JVO2.xdjjs?A=46&B=1&C=04709&P="+stockNum+".TW|Q&Lang=TW";
+        return incomeStatementInfoUrl;
+    }
+    //資產負債
+    public static String getStockBalanceSheetUrl(int stockNum, int startDate, int endDate) {
         String balanceSheetUrl = "http://data.xq.com.tw/Z/XQWEB2011/DATA/JVO2.xdjjs?A=46&B=1&C=04609&P="+stockNum+".TW|Q&FT=KV&Lang=TW";
         return balanceSheetUrl;
     }
