@@ -23,4 +23,8 @@ public interface ApiInterface {
 
     @GET
     Call<StockQueryFactory.stockFinancialRatio> getFinanicalRationItem(@Url String url);
+
+    @GET
+    Call<StockQueryFactory.stockBalanceSheet> getBalanceSheetItem(@Url String url);
+
 }

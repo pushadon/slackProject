@@ -38,7 +38,7 @@ public class QueryUrl {
     //損益表
     public static String getStockIncomeStatementInfoUrl(int stockNum, int startDate, int endDate) {
         String incomeStatementInfoUrl = "http://data.xq.com.tw/Z/XQWEB2011/DATA/JVO2.xdjjs?A=46&B=1&C=04709&P="+stockNum+".TW|Q&Lang=TW";
-        return incomeStatementInfoUrl;
+        return incomeStatementInfoUrl; //[3] 營業收入
     }
     //資產負債
     public static String getStockBalanceSheetUrl(int stockNum, int startDate, int endDate) {

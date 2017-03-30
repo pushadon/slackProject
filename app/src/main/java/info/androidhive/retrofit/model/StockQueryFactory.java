@@ -222,7 +222,7 @@ public  class StockQueryFactory {
         private String expireType;
         @SerializedName("SERVERNAME")
         @Expose
-        private String sERVERNAME;
+        private String SERVERNAME;
 
         public List<StockFinancialRatioItem> getRows() {
             return rows;
@@ -257,11 +257,58 @@ public  class StockQueryFactory {
         }
 
         public String getSERVERNAME() {
-            return sERVERNAME;
+            return SERVERNAME;
         }
 
-        public void setSERVERNAME(String sERVERNAME) {
-            this.sERVERNAME = sERVERNAME;
+        public void setSERVERNAME(String SERVERNAME) {
+            this.SERVERNAME = SERVERNAME;
+        }
+    }
+
+    public static class stockBalanceSheet {
+        @SerializedName("rows")
+        @Expose
+        private List<StockBalanceSheetItem> rows = null;
+        @SerializedName("dt")
+        @Expose
+        private String dt;
+        @SerializedName("ExpireType")
+        @Expose
+        private String expireType;
+        @SerializedName("SERVERNAME")
+        @Expose
+        private String SERVERNAME;
+
+        public List<StockBalanceSheetItem> getRows() {
+            return rows;
+        }
+
+        public void setRows(List<StockBalanceSheetItem> rows) {
+            this.rows = rows;
+        }
+
+        public String getDt() {
+            return dt;
+        }
+
+        public void setDt(String dt) {
+            this.dt = dt;
+        }
+
+        public String getExpireType() {
+            return expireType;
+        }
+
+        public void setExpireType(String expireType) {
+            this.expireType = expireType;
+        }
+
+        public String getSERVERNAME() {
+            return SERVERNAME;
+        }
+
+        public void setSERVERNAME(String SERVERNAME) {
+            this.SERVERNAME = SERVERNAME;
         }
     }
 

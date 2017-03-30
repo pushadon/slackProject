@@ -4,17 +4,41 @@
     android:layout_height="match_parent"
     tools:context="info.androidhive.retrofit.fragment.StockPlotFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/cashFlowChart"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_height="match_parent"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="30dp"
+            android:orientation="vertical">
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/cashFlowChart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"/>
 
-    </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自由現金流量:來自(營運現金流量)加上(投資活動現金流量)，數值為0代表負數"/>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChart"
+                android:layout_width="match_parent"
+                android:layout_marginTop="30dp"
+                android:layout_height="200dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="用當季的存貨除以該季的營業收入就是存貨營收比。換句話說，這個數字可以代表：「現在的存貨還要幾季可以賣完」"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="應收帳款遠高於營收不一定就有做假帳之嫌,但如果該倍數暴增或長期處於高檔,保守的投資人寧可錯放一百,也別錯買一間"/>
+        </LinearLayout>
+
 
 </FrameLayout>
