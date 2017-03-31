@@ -130,10 +130,42 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="Current YearEPS"/>
+                <TextView
+                    android:layout_marginLeft="35dp"
+                    android:id="@+id/tv_current_eps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Estimated EPS"/>
                 <TextView
                     android:layout_marginLeft="35dp"
                     android:id="@+id/tv_eps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Estimate PEG"/>
+                <TextView
+                    android:layout_marginLeft="35dp"
+                    android:id="@+id/tv_peg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="12"/>

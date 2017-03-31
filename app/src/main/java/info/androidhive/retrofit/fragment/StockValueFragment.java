@@ -90,6 +90,8 @@ public class StockValueFragment extends Fragment implements View.OnClickListener
     TextView tvPEHigh;
     TextView tvPELow;
     TextView tvPECurrent;
+    TextView currentEPS;
+    TextView estPEG;
     String mStockNum;
     LinearLayout resultLayout;
     int okCount = 0;
@@ -153,6 +155,8 @@ public class StockValueFragment extends Fragment implements View.OnClickListener
         estLowPrice = (TextView)getView().findViewById(R.id.tv_est_low_price);
         stockPrice = (TextView)getView().findViewById(R.id.stock_price);
         estEPS = (TextView)getView().findViewById(R.id.tv_eps);
+        currentEPS = (TextView) getView().findViewById(R.id.tv_current_eps);
+        estPEG = (TextView) getView().findViewById(R.id.tv_peg);
         riskRatio = (TextView)getView().findViewById(R.id.tv_risk);
         tv_detail = (TextView)getView().findViewById(R.id.tv_detail);
         tvLink = (TextView) getView().findViewById(R.id.tv_link);
@@ -218,6 +222,10 @@ public class StockValueFragment extends Fragment implements View.OnClickListener
     public void onEvent(StockFinancialRatioEvent event) {
         d("Main totalYear",event.getYearEpsList().toString());
         myEstimate.setStockYearEps(event.getYearEpsList());
+        Double currentEPS = 0.0;
+        for(int i=0;i<4 ;i++) {
+            currentEPS+= event.getYearEpsList().get(i);
+        }
         myEstimate.setIncomeRatioAverage(event.getIncomeRatioAverage());
         myEstimate.setIncomeRatioList(event.getMyIncomeRatioList());
         PriceContentFactory.getRelatePriceAndSendEvent(Integer.parseInt(mStockNum),event.getEpsBaseYear(),event.getEpsBaseMonth());
@@ -265,6 +273,8 @@ public class StockValueFragment extends Fragment implements View.OnClickListener
         }
         stockPrice.setText(String.format("%.2f", (double)myEstimate.getCurrentPrice()));
         estEPS.setText(String.format("%.2f", (double)myEstimate.getEstimateEPS()));
+        currentEPS.setText(String.format("%.2f", (double)myEstimate.getStockYearEps().get(0)));
+        estPEG.setText(String.format("%.2f", (double)myEstimate.getEstimatePEG()));
         if(myEstimate.getRiskRatio() >100) {
             riskRatio.setText("no risk");
         } else if(myEstimate.getRiskRatio() == 0) {

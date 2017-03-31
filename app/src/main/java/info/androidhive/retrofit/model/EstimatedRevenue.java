@@ -17,6 +17,7 @@ public class EstimatedRevenue {
     private Double currentPrice;
     private Double estimateRevenue;
 
+
     public Double getRevenueYoy() {
         return revenueYoy;
     }
@@ -33,6 +34,14 @@ public class EstimatedRevenue {
     private List<Double> stockYearEps;
     private List<Double[]> stockYearPriceBond; // [0]date [1]high [2] low
     private Double[] stockYearPEAverage;
+
+    public Double getEstimatePEG() {
+        Double currentPE = getCurrentPrice()/getStockYearEps().get(0);
+        Double tmpEPSGrowthRate = ((estimateEPS/getStockYearEps().get(0))-1)*100;
+        return currentPE/tmpEPSGrowthRate;
+    }
+
+    private Double estimatePEG;
     private Double stockYearPEHigh = 0.0;
     private Double stockYearPELow = 0.0;
 
@@ -205,7 +214,7 @@ public class EstimatedRevenue {
     }
 
     public void setRevenueYoy(Double revenueYoy) {
-        Log.d("EstimatedRevenue","setRevenueYoyList:"+revenueYoy);
+        Log.d("EstimatedRevenue","setRevenueYoy:"+revenueYoy);
         this.revenueYoy = revenueYoy;
     }
 

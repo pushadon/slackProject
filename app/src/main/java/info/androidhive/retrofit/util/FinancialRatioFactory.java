@@ -33,7 +33,7 @@ public class FinancialRatioFactory {
     static int queryYear = 0;
 
 
-    public static void getStockFinancialRatioQueryResult(int stockNum) {
+    public static void getStockFinancialRatioQueryResult(int stockNum){
         mEventBus = EventBus.getDefault();
         myYearEpsList.clear();
         myIncomeRatioList.clear();

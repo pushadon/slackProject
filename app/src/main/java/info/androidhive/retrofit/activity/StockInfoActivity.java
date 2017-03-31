@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import info.androidhive.retrofit.R;
 import info.androidhive.retrofit.adapter.PagerAdapter;
+import info.androidhive.retrofit.util.ExceptionHandler;
 
 
 public class StockInfoActivity extends AppCompatActivity {
@@ -25,6 +26,7 @@ public class StockInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_info);
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
         Intent intent = getIntent();
         mStockNum = intent.getStringExtra("STOCK_NUM");
         mTab = (TabLayout) findViewById(R.id.tab_layout);
